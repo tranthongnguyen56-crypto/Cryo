@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyro — Seal a capsule</title>
+<style>
+:root{
+  --ice:#F4F8FB;--ice1:#E2EDF4;--frost:#8FC3DD;
+  --frost-deep:#2F6A8F;--ink:#101D2B;--ink-soft:#5B6F80;
+  --ring:#DDE8EF;--paper:#fff;--dark:#080F18;
+  --gold:#F5C97A;--gold-bg:#FFF8EC;--gold-ink:#8a6000;
+  --err:#e74c3c;--err-bg:#fdf0ef;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;background:var(--ice);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;}
+
+/* ── LAYOUT ── */
+.app{max-width:520px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;padding:0 0 40px;}
+
+/* ── NAV ── */
+nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 24px 0;margin-bottom:8px;
+}
+.nav-brand{display:flex;align-items:center;gap:7px;font-size:15px;font-weight:600;color:var(--ink);text-decoration:none;}
+.nav-dot{width:8px;height:8px;border-radius:50%;background:var(--frost-deep);}
+.nav-step{font-size:12px;color:var(--ink-soft);}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap{padding:0 24px;margin-bottom:24px;}
+.progress-track{height:3px;background:var(--ring);border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--frost-deep);border-radius:2px;transition:width 0.4s ease;}
+
+/* ── SCREENS ── */
+.screen{display:none;flex:1;padding:0 24px;animation:fadeIn 0.2s ease;}
+.screen.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── TYPOGRAPHY ── */
+h1{font-family:Georgia,serif;font-weight:500;font-size:1.75rem;letter-spacing:-0.02em;color:var(--ink);margin-bottom:6px;line-height:1.2;}
+.sub{font-size:13px;color:var(--ink-soft);line-height:1.6;margin-bottom:24px;}
+
+/* ── FORM ELEMENTS ── */
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;letter-spacing:0.02em;}
+.field input,.field textarea,.field select{
+  width:100%;background:var(--paper);border:1.5px solid var(--ring);
+  border-radius:12px;padding:12px 14px;font-size:14px;color:var(--ink);
+  font-family:inherit;outline:none;transition:border-color 0.15s,box-shadow 0.15s;
+  appearance:none;
+}
+.field input:focus,.field textarea:focus,.field select:focus{
+  border-color:var(--frost-deep);box-shadow:0 0 0 3px rgba(47,106,143,0.1);
+}
+.field input.error,.field textarea.error{border-color:var(--err);}
+.field .err-msg{font-size:11px;color:var(--err);margin-top:4px;display:none;}
+.field .err-msg.show{display:block;}
+.field textarea{resize:none;line-height:1.7;font-family:Georgia,serif;min-height:180px;}
+.char-count{font-size:11px;color:var(--ink-soft);text-align:right;margin-top:4px;}
+.char-count.near{color:var(--gold-ink);}
+
+/* ── TYPE TABS ── */
+.type-tabs{display:flex;gap:8px;margin-bottom:16px;}
+.type-tab{
+  flex:1;padding:10px;border-radius:10px;border:1.5px solid var(--ring);
+  background:var(--paper);font-size:12px;font-weight:600;color:var(--ink-soft);
+  text-align:center;cursor:pointer;transition:all 0.15s;
+}
+.type-tab.on{background:var(--ice1);border-color:var(--frost-deep);color:var(--frost-deep);}
+
+/* ── RECIPIENT ── */
+.recip-option{
+  display:flex;align-items:flex-start;gap:14px;
+  background:var(--paper);border:1.5px solid var(--ring);
+  border-radius:14px;padding:16px;margin-bottom:10px;cursor:pointer;
+  transition:all 0.15s;
+}
+.recip-option:hover{border-color:var(--frost-deep);}
+.recip-option.sel{border-color:var(--frost-deep);background:var(--ice1);}
+.recip-radio{
+  width:18px;height:18px;border-radius:50%;border:2px solid var(--ring);
+  background:var(--paper);flex-shrink:0;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;transition:all 0.15s;
+}
+.recip-option.sel .recip-radio{border-color:var(--frost-deep);background:var(--frost-deep);}
+.recip-option.sel .recip-radio::after{content:"";width:6px;height:6px;border-radius:50%;background:#fff;}
+.recip-icon{font-size:22px;flex-shrink:0;}
+.recip-title{font-size:14px;font-weight:600;color:var(--ink);}
+.recip-sub{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+.recip-extra{margin-top:10px;display:none;}
+.recip-extra.show{display:block;}
+
+/* ── CALENDAR ── */
+.cal-wrap{background:var(--paper);border:1.5px solid var(--ring);border-radius:14px;overflow:hidden;margin-bottom:14px;}
+.cal-head{
+  background:var(--frost-deep);padding:12px 16px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.cal-head-label{font-size:14px;font-weight:600;color:#fff;}
+.cal-nav-btn{
+  background:rgba(255,255,255,0.15);border:none;border-radius:6px;
+  color:#fff;font-size:16px;width:28px;height:28px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background 0.15s;
+}
+.cal-nav-btn:hover{background:rgba(255,255,255,0.25);}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);padding:10px;gap:4px;}
+.cd{
+  text-align:center;font-size:12px;padding:6px 0;
+  border-radius:8px;cursor:pointer;color:var(--ink-soft);
+  transition:background 0.1s;
+}
+.cd.hd{color:var(--frost-deep);font-weight:700;cursor:default;font-size:11px;}
+.cd.empty{cursor:default;}
+.cd.past{color:var(--ring);cursor:not-allowed;}
+.cd:hover:not(.hd):not(.empty):not(.past){background:var(--ice1);}
+.cd.sel{background:var(--ink);color:#fff;border-radius:50%;font-weight:600;}
+.cd.today{color:var(--frost-deep);font-weight:700;}
+
+/* year picker */
+.year-row{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--ice1);border-radius:10px;padding:12px 16px;margin-bottom:12px;
+}
+.year-label{font-size:13px;color:var(--ink-soft);}
+.year-controls{display:flex;align-items:center;gap:10px;}
+.year-val{font-family:Georgia,serif;font-size:18px;font-weight:500;color:var(--frost-deep);min-width:48px;text-align:center;}
+.year-btn{
+  width:28px;height:28px;border-radius:50%;border:1.5px solid var(--ring);
+  background:var(--paper);color:var(--frost-deep);font-size:16px;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all 0.15s;
+}
+.year-btn:hover{background:var(--frost-deep);color:#fff;border-color:var(--frost-deep);}
+
+/* quick picks */
+.occ-label{font-size:12px;font-weight:600;color:var(--ink-soft);margin-bottom:8px;}
+.occ-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+.occ{
+  background:var(--paper);border:1.5px solid var(--ring);
+  border-radius:100px;padding:6px 14px;font-size:12px;color:var(--ink-soft);
+  cursor:pointer;transition:all 0.15s;
+}
+.occ:hover{border-color:var(--frost-deep);color:var(--frost-deep);}
+.occ.on{background:var(--ice1);border-color:var(--frost-deep);color:var(--frost-deep);font-weight:600;}
+
+/* selected date display */
+.date-display{
+  background:var(--ice1);border:1.5px solid var(--frost-deep);
+  border-radius:10px;padding:12px 16px;margin-bottom:20px;
+  display:flex;align-items:center;gap:10px;
+}
+.date-display-icon{font-size:18px;}
+.date-display-val{font-family:Georgia,serif;font-size:15px;font-weight:500;color:var(--frost-deep);}
+.date-display-sub{font-size:11px;color:var(--ink-soft);margin-top:1px;}
+.date-display.empty{border-color:var(--ring);background:var(--paper);}
+.date-display.empty .date-display-val{color:var(--ink-soft);}
+
+/* ── REVIEW ── */
+.review-block{
+  background:var(--paper);border:1.5px solid var(--ring);
+  border-radius:14px;padding:16px;margin-bottom:12px;
+}
+.review-block-label{font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px;}
+.review-msg{font-family:Georgia,serif;font-size:13px;color:var(--ink);line-height:1.7;}
+.review-meta{display:flex;gap:8px;margin-bottom:12px;}
+.meta-pill{flex:1;background:var(--ice1);border-radius:10px;padding:12px;text-align:center;}
+.meta-val{font-family:Georgia,serif;font-size:14px;font-weight:500;color:var(--frost-deep);}
+.meta-key{font-size:10px;color:var(--ink-soft);margin-top:2px;}
+.warn-box{
+  background:var(--gold-bg);border:1.5px solid var(--gold);border-radius:12px;
+  padding:12px 14px;font-size:12px;color:var(--gold-ink);
+  display:flex;gap:10px;align-items:flex-start;margin-bottom:20px;line-height:1.6;
+}
+
+/* ── SEALING ANIMATION ── */
+#s-sealing{text-align:center;padding-top:60px;}
+.seal-orb{
+  width:90px;height:90px;border-radius:50%;
+  background:linear-gradient(180deg,#DFF0FB 0%,#2F6A8F 100%);
+  box-shadow:0 0 0 0 rgba(47,106,143,0.3);
+  position:relative;margin:0 auto 28px;
+  animation:sealPulse 1.5s ease-in-out infinite;
+}
+@keyframes sealPulse{
+  0%{box-shadow:0 0 0 0 rgba(47,106,143,0.4);}
+  70%{box-shadow:0 0 0 20px rgba(47,106,143,0);}
+  100%{box-shadow:0 0 0 0 rgba(47,106,143,0);}
+}
+.seal-orb::before{content:"";position:absolute;top:16px;left:16px;width:13px;height:13px;border-radius:50%;background:rgba(255,255,255,0.9);}
+.seal-orb::after{content:"";position:absolute;top:-6px;right:-3px;width:13px;height:13px;border-radius:50%;background:#7FC4E6;}
+.seal-progress{width:180px;height:3px;background:var(--ring);border-radius:2px;overflow:hidden;margin:24px auto 0;}
+.seal-progress-fill{height:100%;width:0;background:var(--frost-deep);border-radius:2px;transition:width 0.1s linear;}
+#s-sealing h1{font-size:1.4rem;margin-bottom:8px;}
+#s-sealing .sub{margin-bottom:0;}
+
+/* ── SEALED CONFIRMATION ── */
+#s-sealed{text-align:center;padding-top:48px;}
+.sealed-badge{
+  width:80px;height:80px;border-radius:50%;background:var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;margin:0 auto 22px;
+  box-shadow:0 16px 40px rgba(16,29,43,0.2);
+}
+#s-sealed h1{font-style:italic;margin-bottom:10px;}
+#s-sealed .sub{max-width:320px;margin:0 auto 28px;}
+.countdown-box{
+  background:var(--ice1);border:1.5px solid var(--ring);border-radius:14px;
+  padding:18px;margin:0 auto 16px;text-align:center;
+}
+.countdown-label{font-size:11px;color:var(--ink-soft);margin-bottom:6px;}
+.countdown-val{font-family:Georgia,serif;font-size:2.2rem;font-weight:500;color:var(--frost-deep);line-height:1;}
+.countdown-unit{font-size:13px;color:var(--ink-soft);margin-top:4px;}
+.backup-note{
+  background:var(--ice1);border-radius:10px;padding:12px 14px;
+  font-size:11px;color:var(--ink-soft);line-height:1.6;margin-bottom:24px;
+}
+.backup-note strong{color:var(--ink);}
+
+/* ── MY CAPSULES ── */
+#s-mycapsules{padding-top:0;}
+.capsules-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.capsules-count{font-size:12px;color:var(--ink-soft);}
+.empty-state{text-align:center;padding:60px 20px;}
+.empty-icon{font-size:48px;margin-bottom:16px;}
+.empty-title{font-family:Georgia,serif;font-size:18px;font-weight:500;color:var(--ink);margin-bottom:8px;}
+.empty-sub{font-size:13px;color:var(--ink-soft);line-height:1.6;margin-bottom:24px;}
+.capsule-item{
+  background:var(--paper);border:1.5px solid var(--ring);
+  border-radius:14px;padding:16px;margin-bottom:10px;
+  cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:14px;
+}
+.capsule-item:hover{border-color:var(--frost-deep);transform:translateX(2px);}
+.capsule-item.urgent{border-color:var(--gold);}
+.ci-icon{font-size:22px;flex-shrink:0;}
+.ci-body{flex:1;min-width:0;}
+.ci-date{font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--frost-deep);margin-bottom:3px;}
+.capsule-item.urgent .ci-date{color:var(--gold-ink);}
+.ci-title{font-family:Georgia,serif;font-size:14px;color:var(--ink);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ci-meta{font-size:11px;color:var(--ink-soft);}
+.ci-arrow{font-size:16px;color:var(--ring);flex-shrink:0;}
+
+/* ── CAPSULE DETAIL ── */
+#s-detail{padding-top:0;}
+.detail-header{margin-bottom:20px;}
+.detail-tag{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--frost-deep);margin-bottom:8px;}
+.detail-msg{
+  background:var(--paper);border:1.5px solid var(--ring);border-radius:14px;
+  padding:20px;margin-bottom:14px;font-family:Georgia,serif;
+  font-size:14px;color:var(--ink);line-height:1.8;
+  box-shadow:0 2px 8px rgba(16,29,43,0.04);
+}
+.detail-meta-row{display:flex;gap:8px;margin-bottom:16px;}
+.detail-locked-notice{
+  background:var(--ice1);border:1.5px solid var(--ring);
+  border-radius:12px;padding:14px;font-size:12px;color:var(--ink-soft);
+  display:flex;gap:10px;align-items:center;margin-bottom:20px;
+}
+
+/* ── BUTTONS ── */
+.btn{
+  width:100%;border:none;border-radius:100px;font-size:15px;font-weight:600;
+  padding:15px;text-align:center;cursor:pointer;
+  transition:transform 0.15s,opacity 0.15s;letter-spacing:0.01em;font-family:inherit;
+}
+.btn:active{transform:scale(0.98);}
+.btn-primary{background:var(--ink);color:var(--ice);box-shadow:0 8px 24px rgba(16,29,43,0.15);}
+.btn-primary:hover{background:var(--frost-deep);}
+.btn-primary:disabled{background:var(--ring);color:var(--ink-soft);cursor:not-allowed;box-shadow:none;}
+.btn-ghost{background:var(--paper);border:1.5px solid var(--ring);color:var(--ink-soft);}
+.btn-ghost:hover{border-color:var(--ink-soft);color:var(--ink);}
+.btn-sm{font-size:13px;padding:10px 20px;width:auto;}
+.btn-row{display:flex;flex-direction:column;gap:10px;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-brand" href="#" onclick="go('s-home')">
+      <div class="nav-dot"></div>Cyro
+    </a>
+    <div class="nav-step" id="nav-step"></div>
+  </nav>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  </div>
+
+  <!-- ══ HOME ══ -->
+  <div class="screen active" id="s-home">
+    <h1>What will you<br>seal today?</h1>
+    <p class="sub">Lock a message, photo, or prediction until the exact date you choose.<br>A promise that doesn't expire.</p>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="startCreate()">🔒 Seal a new capsule</button>
+      <button class="btn btn-ghost" onclick="go('s-mycapsules')">📦 My capsules</button>
+    </div>
+  </div>
+
+  <!-- ══ WRITE ══ -->
+  <div class="screen" id="s-write">
+    <h1>Write your message</h1>
+    <p class="sub">Only you (or who you choose) will ever read this.</p>
+    <div class="type-tabs">
+      <div class="type-tab on" onclick="switchType(this,'message')">✉ Message</div>
+      <div class="type-tab" onclick="switchType(this,'prediction')">🔮 Prediction</div>
+      <div class="type-tab" onclick="switchType(this,'note')">📝 Note</div>
+    </div>
+    <div class="field">
+      <label id="write-label">Your message</label>
+      <textarea id="msg-input" placeholder="Dear future me…&#10;&#10;Start anywhere. This is yours." oninput="onMsgInput(this)" maxlength="2000"></textarea>
+      <div class="char-count" id="char-count">0 / 2000</div>
+    </div>
+    <div class="field">
+      <label>Title (optional)</label>
+      <input type="text" id="title-input" placeholder="e.g. Letter to future me" maxlength="60">
+    </div>
+    <div class="field">
+      <label>Emoji (optional)</label>
+      <input type="text" id="emoji-input" placeholder="✉️" maxlength="2" style="font-size:20px;max-width:80px">
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="write-next-btn" onclick="writeNext()" disabled>Next → Who receives this?</button>
+      <button class="btn btn-ghost" onclick="go('s-home')">← Back</button>
+    </div>
+  </div>
+
+  <!-- ══ RECIPIENT ══ -->
+  <div class="screen" id="s-recipient">
+    <h1>Who receives this?</h1>
+    <p class="sub">A capsule can be just for you, or a gift for someone else.</p>
+    <div class="recip-option sel" id="recip-self" onclick="selRecip('self')">
+      <div class="recip-radio"></div>
+      <div class="recip-icon">🪞</div>
+      <div>
+        <div class="recip-title">Just me</div>
+        <div class="recip-sub">Only I can open this on the unlock date</div>
+      </div>
+    </div>
+    <div class="recip-option" id="recip-friend" onclick="selRecip('friend')">
+      <div class="recip-radio"></div>
+      <div class="recip-icon">🎁</div>
+      <div style="flex:1">
+        <div class="recip-title">Someone else</div>
+        <div class="recip-sub">They'll receive a notification when it unlocks</div>
+        <div class="recip-extra" id="friend-fields">
+          <div class="field" style="margin-top:10px;margin-bottom:0">
+            <label>Their name</label>
+            <input type="text" id="friend-name" placeholder="e.g. Maya">
+          </div>
+          <div class="field" style="margin-top:8px;margin-bottom:0">
+            <label>Their email</label>
+            <input type="email" id="friend-email" placeholder="maya@email.com">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:20px">
+      <button class="btn btn-primary" onclick="recipNext()">Next → Pick unlock date</button>
+      <button class="btn btn-ghost" onclick="go('s-write')">← Back</button>
+    </div>
+  </div>
+
+  <!-- ══ DATE ══ -->
+  <div class="screen" id="s-date">
+    <h1>When should it open?</h1>
+    <p class="sub">Nothing opens before this date — guaranteed.</p>
+
+    <div class="year-row">
+      <div class="year-label">Unlock year</div>
+      <div class="year-controls">
+        <button class="year-btn" onclick="changeYear(-1)">−</button>
+        <div class="year-val" id="year-val">2026</div>
+        <button class="year-btn" onclick="changeYear(1)">+</button>
+      </div>
+    </div>
+
+    <div class="cal-wrap">
+      <div class="cal-head">
+        <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
+        <div class="cal-head-label" id="cal-label">August 2026</div>
+        <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+
+    <div class="occ-label">Quick pick</div>
+    <div class="occ-row">
+      <div class="occ" onclick="quickPick(this,1,'year')">1 year</div>
+      <div class="occ" onclick="quickPick(this,5,'year')">5 years</div>
+      <div class="occ" onclick="quickPick(this,18,'birthday')">Child's 18th</div>
+      <div class="occ" onclick="quickPick(this,1,'newyear')">New Year</div>
+      <div class="occ" onclick="quickPick(this,1,'graduation')">Graduation</div>
+    </div>
+
+    <div class="date-display empty" id="date-display">
+      <div class="date-display-icon">📅</div>
+      <div>
+        <div class="date-display-val" id="date-display-val">No date selected</div>
+        <div class="date-display-sub" id="date-display-sub">Tap a day on the calendar</div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="date-next-btn" onclick="dateNext()" disabled>Next → Review</button>
+      <button class="btn btn-ghost" onclick="go('s-recipient')">← Back</button>
+    </div>
+  </div>
+
+  <!-- ══ REVIEW ══ -->
+  <div class="screen" id="s-review">
+    <h1>Review before sealing</h1>
+    <p class="sub">Once sealed, nothing can be changed.</p>
+
+    <div class="review-block">
+      <div class="review-block-label">Your message</div>
+      <div class="review-msg" id="review-msg-text"></div>
+    </div>
+
+    <div class="review-meta">
+      <div class="meta-pill"><div class="meta-val" id="review-date">—</div><div class="meta-key">Opens on</div></div>
+      <div class="meta-pill"><div class="meta-val" id="review-days">—</div><div class="meta-key">Days away</div></div>
+      <div class="meta-pill"><div class="meta-val" id="review-to">—</div><div class="meta-key">Recipient</div></div>
+    </div>
+
+    <div class="warn-box">
+      🔒 Once sealed, Cy holds this. Even we can't open it early — and neither can you.
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="sealCapsule()">Seal it forever</button>
+      <button class="btn btn-ghost" onclick="go('s-date')">← Back</button>
+    </div>
+  </div>
+
+  <!-- ══ SEALING ══ -->
+  <div class="screen" id="s-sealing">
+    <div class="seal-orb"></div>
+    <h1>Cy is sealing it…</h1>
+    <p class="sub">He's giving it one last hug before locking it away for good.</p>
+    <div class="seal-progress"><div class="seal-progress-fill" id="seal-fill"></div></div>
+  </div>
+
+  <!-- ══ SEALED ══ -->
+  <div class="screen" id="s-sealed">
+    <div class="sealed-badge">🔒</div>
+    <h1>Sealed.</h1>
+    <p class="sub">Cy has it. A promise that doesn't expire — he'll hold it until the day arrives.</p>
+    <div class="countdown-box">
+      <div class="countdown-label">Opens in</div>
+      <div class="countdown-val" id="sealed-days">—</div>
+      <div class="countdown-unit">days</div>
+    </div>
+    <div class="backup-note"><strong>Safe in your browser.</strong> Your capsule is stored locally on this device. Don't clear your browser data before the unlock date.</div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="go('s-mycapsules')">View my capsules</button>
+      <button class="btn btn-ghost" onclick="startCreate()">Seal another capsule</button>
+    </div>
+  </div>
+
+  <!-- ══ MY CAPSULES ══ -->
+  <div class="screen" id="s-mycapsules">
+    <div class="capsules-header">
+      <h1 style="margin-bottom:0;font-size:1.4rem">My capsules</h1>
+      <span class="capsules-count" id="capsules-count"></span>
+    </div>
+    <p class="sub" style="margin-bottom:16px">Everything Cy is holding for you.</p>
+    <div id="capsules-list"></div>
+    <button class="btn btn-primary" onclick="startCreate()" style="margin-top:8px">+ Seal a new capsule</button>
+  </div>
+
+  <!-- ══ CAPSULE DETAIL ══ -->
+  <div class="screen" id="s-detail">
+    <div class="detail-header">
+      <div class="detail-tag" id="detail-tag"></div>
+      <h1 id="detail-title" style="margin-bottom:4px"></h1>
+    </div>
+    <div class="detail-meta-row">
+      <div class="meta-pill"><div class="meta-val" id="detail-date">—</div><div class="meta-key">Opens on</div></div>
+      <div class="meta-pill"><div class="meta-val" id="detail-days">—</div><div class="meta-key">Days away</div></div>
+      <div class="meta-pill"><div class="meta-val" id="detail-to">—</div><div class="meta-key">Recipient</div></div>
+    </div>
+    <div class="detail-locked-notice">
+      🔒 <span>This capsule is sealed. The message below will only display after you confirm you're ready to reveal it.</span>
+    </div>
+    <div class="detail-msg" id="detail-msg" style="display:none"></div>
+    <button class="btn btn-ghost" id="reveal-btn" onclick="revealMessage()" style="margin-bottom:10px">👁 I'm ready — show me the message</button>
+    <button class="btn btn-ghost" onclick="go('s-mycapsules')">← Back to my capsules</button>
+  </div>
+
+</div>
+
+<script>
+// ── STATE ──
+let draft = {};
+let currentCal = { year: new Date().getFullYear(), month: new Date().getMonth() };
+let selectedDate = null;
+let recipType = 'self';
+let msgType = 'message';
+
+// ── ROUTING ──
+const STEPS = ['s-home','s-write','s-recipient','s-date','s-review','s-sealing','s-sealed','s-mycapsules','s-detail'];
+const STEP_LABELS = {
+  's-write':'Step 1 of 4 — Write',
+  's-recipient':'Step 2 of 4 — Recipient',
+  's-date':'Step 3 of 4 — Date',
+  's-review':'Step 4 of 4 — Review',
+};
+const PROGRESS = {'s-write':25,'s-recipient':50,'s-date':75,'s-review':100};
+
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  document.getElementById('nav-step').textContent = STEP_LABELS[id]||'';
+  document.getElementById('progress-fill').style.width = (PROGRESS[id]||0)+'%';
+  if(id==='s-review') populateReview();
+  if(id==='s-mycapsules') renderCapsules();
+}
+
+function startCreate(){
+  draft={};
+  selectedDate=null;
+  recipType='self';
+  msgType='message';
+  document.getElementById('msg-input').value='';
+  document.getElementById('title-input').value='';
+  document.getElementById('emoji-input').value='';
+  document.getElementById('char-count').textContent='0 / 2000';
+  document.getElementById('write-next-btn').disabled=true;
+  selRecip('self');
+  document.querySelectorAll('.occ.on').forEach(o=>o.classList.remove('on'));
+  selectedDate=null;
+  updateDateDisplay();
+  renderCal();
+  go('s-write');
+}
+
+// ── WRITE ──
+const TYPE_PLACEHOLDERS = {
+  message:"Dear future me…\n\nStart anywhere. This is yours.",
+  prediction:"I predict that by this date…",
+  note:"A note I want to remember…"
+};
+const TYPE_LABELS = {message:'Your message',prediction:'Your prediction',note:'Your note'};
+
+function switchType(el, type){
+  document.querySelectorAll('.type-tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  msgType = type;
+  document.getElementById('msg-input').placeholder = TYPE_PLACEHOLDERS[type];
+  document.getElementById('write-label').textContent = TYPE_LABELS[type];
+}
+
+function onMsgInput(el){
+  const len = el.value.length;
+  const cc = document.getElementById('char-count');
+  cc.textContent = len+' / 2000';
+  cc.className = 'char-count'+(len>1800?' near':'');
+  document.getElementById('write-next-btn').disabled = len < 1;
+}
+
+function writeNext(){
+  const msg = document.getElementById('msg-input').value.trim();
+  if(!msg) return;
+  draft.message = msg;
+  draft.title = document.getElementById('title-input').value.trim() || 'My capsule';
+  draft.emoji = document.getElementById('emoji-input').value.trim() || (msgType==='prediction'?'🔮':msgType==='note'?'📝':'✉️');
+  draft.type = msgType;
+  go('s-recipient');
+}
+
+// ── RECIPIENT ──
+function selRecip(type){
+  recipType = type;
+  document.getElementById('recip-self').classList.toggle('sel', type==='self');
+  document.getElementById('recip-friend').classList.toggle('sel', type==='friend');
+  document.getElementById('friend-fields').classList.toggle('show', type==='friend');
+}
+
+function recipNext(){
+  draft.recipType = recipType;
+  if(recipType==='friend'){
+    const name = document.getElementById('friend-name').value.trim();
+    const email = document.getElementById('friend-email').value.trim();
+    draft.friendName = name;
+    draft.friendEmail = email;
+    draft.recipLabel = name || 'Friend';
+  } else {
+    draft.recipLabel = 'You';
+  }
+  currentCal = { year: new Date().getFullYear(), month: new Date().getMonth() };
+  renderCal();
+  go('s-date');
+}
+
+// ── CALENDAR ──
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function renderCal(){
+  const { year, month } = currentCal;
+  document.getElementById('cal-label').textContent = MONTHS[month]+' '+year;
+  document.getElementById('year-val').textContent = year;
+  const grid = document.getElementById('cal-grid');
+  grid.innerHTML = '';
+  ['M','T','W','T','F','S','S'].forEach(d=>{
+    const el=document.createElement('div');
+    el.className='cd hd';el.textContent=d;grid.appendChild(el);
+  });
+  const first = new Date(year,month,1).getDay(); // 0=Sun
+  const startOffset = first===0?6:first-1;
+  const daysIn = new Date(year,month+1,0).getDate();
+  const today = new Date(); today.setHours(0,0,0,0);
+  for(let i=0;i<startOffset;i++){
+    const el=document.createElement('div');el.className='cd empty';grid.appendChild(el);
+  }
+  for(let d=1;d<=daysIn;d++){
+    const el=document.createElement('div');
+    el.className='cd';el.textContent=d;
+    const dt=new Date(year,month,d);dt.setHours(0,0,0,0);
+    const isPast = dt<=today;
+    if(isPast){ el.classList.add('past'); }
+    else {
+      el.onclick=()=>selectDay(d);
+      if(selectedDate&&selectedDate.getFullYear()===year&&selectedDate.getMonth()===month&&selectedDate.getDate()===d){
+        el.classList.add('sel');
+      }
+    }
+    grid.appendChild(el);
+  }
+}
+
+function changeMonth(dir){
+  currentCal.month += dir;
+  if(currentCal.month>11){currentCal.month=0;currentCal.year++;}
+  if(currentCal.month<0){currentCal.month=11;currentCal.year--;}
+  document.getElementById('year-val').textContent = currentCal.year;
+  renderCal();
+}
+
+function changeYear(dir){
+  const ny = currentCal.year+dir;
+  if(ny<new Date().getFullYear()) return;
+  currentCal.year = ny;
+  renderCal();
+}
+
+function selectDay(d){
+  selectedDate = new Date(currentCal.year, currentCal.month, d);
+  renderCal();
+  updateDateDisplay();
+}
+
+function updateDateDisplay(){
+  const el = document.getElementById('date-display');
+  const val = document.getElementById('date-display-val');
+  const sub = document.getElementById('date-display-sub');
+  const btn = document.getElementById('date-next-btn');
+  if(!selectedDate){
+    el.className='date-display empty';
+    val.textContent='No date selected';
+    sub.textContent='Tap a day on the calendar';
+    btn.disabled=true;
+    return;
+  }
+  el.className='date-display';
+  val.textContent=selectedDate.toLocaleDateString('en-US',{day:'numeric',month:'long',year:'numeric'});
+  const days=daysUntil(selectedDate);
+  sub.textContent=days+' days away';
+  btn.disabled=false;
+}
+
+function daysUntil(date){
+  const today=new Date();today.setHours(0,0,0,0);
+  return Math.round((date-today)/(1000*60*60*24));
+}
+
+function quickPick(el, amount, type){
+  document.querySelectorAll('.occ.on').forEach(o=>o.classList.remove('on'));
+  el.classList.add('on');
+  const now=new Date();
+  let d;
+  if(type==='year'){d=new Date(now.getFullYear()+amount,now.getMonth(),now.getDate());}
+  else if(type==='birthday'){d=new Date(now.getFullYear()+18,now.getMonth(),now.getDate());}
+  else if(type==='newyear'){d=new Date(now.getFullYear()+1,0,1);}
+  else if(type==='graduation'){d=new Date(now.getFullYear()+4,5,1);}
+  selectedDate=d;
+  currentCal={year:d.getFullYear(),month:d.getMonth()};
+  renderCal();
+  updateDateDisplay();
+}
+
+function dateNext(){
+  if(!selectedDate) return;
+  draft.unlockDate = selectedDate.toISOString();
+  draft.unlockLabel = selectedDate.toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'});
+  draft.daysAway = daysUntil(selectedDate);
+  go('s-review');
+}
+
+// ── REVIEW ──
+function populateReview(){
+  document.getElementById('review-msg-text').textContent = draft.message;
+  document.getElementById('review-date').textContent = draft.unlockLabel||'—';
+  document.getElementById('review-days').textContent = draft.daysAway||'—';
+  document.getElementById('review-to').textContent = draft.recipLabel||'You';
+}
+
+// ── SEAL ──
+function sealCapsule(){
+  go('s-sealing');
+  const fill = document.getElementById('seal-fill');
+  let pct=0;
+  const interval=setInterval(()=>{
+    pct+=2;fill.style.width=pct+'%';
+    if(pct>=100){
+      clearInterval(interval);
+      const capsule={
+        id: Date.now().toString(),
+        ...draft,
+        sealedAt: new Date().toISOString(),
+      };
+      saveCapsule(capsule);
+      document.getElementById('sealed-days').textContent = draft.daysAway;
+      setTimeout(()=>go('s-sealed'),400);
+    }
+  },40);
+}
+
+// ── LOCALSTORAGE ──
+function getCapsules(){
+  try{ return JSON.parse(localStorage.getItem('cyro_capsules')||'[]'); }
+  catch{ return []; }
+}
+function saveCapsule(c){
+  const list=getCapsules();
+  list.push(c);
+  localStorage.setItem('cyro_capsules',JSON.stringify(list));
+}
+
+// ── MY CAPSULES ──
+function renderCapsules(){
+  const list=getCapsules();
+  const container=document.getElementById('capsules-list');
+  const count=document.getElementById('capsules-count');
+  count.textContent=list.length+' sealed';
+  if(!list.length){
+    container.innerHTML=`
+      <div class="empty-state">
+        <div class="empty-icon">📦</div>
+        <div class="empty-title">Nothing sealed yet</div>
+        <div class="empty-sub">Your first capsule is waiting to be written.<br>Seal something today — your future self will thank you.</div>
+      </div>`;
+    return;
+  }
+  container.innerHTML='';
+  list.slice().reverse().forEach(c=>{
+    const days=daysUntil(new Date(c.unlockDate));
+    const urgent=days<180;
+    const div=document.createElement('div');
+    div.className='capsule-item'+(urgent?' urgent':'');
+    div.onclick=()=>showDetail(c.id);
+    div.innerHTML=`
+      <div class="ci-icon">${c.emoji||'✉️'}</div>
+      <div class="ci-body">
+        <div class="ci-date">${c.unlockLabel}</div>
+        <div class="ci-title">${c.title||'My capsule'}</div>
+        <div class="ci-meta">🔒 Sealed · ${days} days away · To: ${c.recipLabel||'You'}</div>
+      </div>
+      <div class="ci-arrow">›</div>`;
+    container.appendChild(div);
+  });
+}
+
+// ── DETAIL ──
+let detailRevealed=false;
+function showDetail(id){
+  const capsule=getCapsules().find(c=>c.id===id);
+  if(!capsule) return;
+  detailRevealed=false;
+  const days=daysUntil(new Date(capsule.unlockDate));
+  document.getElementById('detail-tag').textContent=(capsule.type||'message').toUpperCase()+' · SEALED';
+  document.getElementById('detail-title').textContent=capsule.title||'My capsule';
+  document.getElementById('detail-date').textContent=capsule.unlockLabel;
+  document.getElementById('detail-days').textContent=days;
+  document.getElementById('detail-to').textContent=capsule.recipLabel||'You';
+  document.getElementById('detail-msg').textContent=capsule.message;
+  document.getElementById('detail-msg').style.display='none';
+  document.getElementById('reveal-btn').textContent='👁 I\'m ready — show me the message';
+  document.getElementById('reveal-btn').style.display='block';
+  go('s-detail');
+}
+
+function revealMessage(){
+  if(!detailRevealed){
+    detailRevealed=true;
+    document.getElementById('detail-msg').style.display='block';
+    document.getElementById('reveal-btn').textContent='🔒 Hide message';
+  } else {
+    detailRevealed=false;
+    document.getElementById('detail-msg').style.display='none';
+    document.getElementById('reveal-btn').textContent='👁 I\'m ready — show me the message';
+  }
+}
+
+// ── INIT ──
+renderCal();
+</script>
+</body>
+</html>
