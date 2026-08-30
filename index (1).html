@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyro — A promise that doesn't expire</title>
+<style>
+:root{
+  --ink:#101D2B;--ink-soft:#5B6F80;
+  --frost:#8FC3DD;--frost-deep:#2F6A8F;
+  --ice:#F4F8FB;--ice1:#E2EDF4;
+  --ring:#DDE8EF;--paper:#fff;
+  --dark:#080F18;--dark2:#0D1824;--dark3:#121F2C;
+  --dark-ring:rgba(255,255,255,0.08);
+  --dark-text:#EAF3F8;--dark-soft:#8AA1B0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--dark);color:var(--dark-text);-webkit-font-smoothing:antialiased;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(8,15,24,0.85);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--dark-ring);
+  padding:0 6vw;height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-brand{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--dark-text);}
+.nav-dot{width:8px;height:8px;border-radius:50%;background:var(--frost);}
+.nav-links{display:flex;align-items:center;gap:24px;}
+.nav-links a{font-size:13px;color:var(--dark-soft);text-decoration:none;transition:color 0.15s;}
+.nav-links a:hover{color:var(--dark-text);}
+.nav-cta{
+  background:var(--dark-text);color:var(--ink);border:none;
+  font-size:13px;font-weight:600;padding:8px 18px;border-radius:100px;
+  cursor:pointer;text-decoration:none;transition:opacity 0.15s;
+}
+.nav-cta:hover{opacity:0.88;}
+
+/* ── SHARED ── */
+.wrap{max-width:1060px;margin:0 auto;padding:0 6vw;}
+.eyebrow{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--frost);font-weight:600;margin-bottom:14px;}
+.section{padding:96px 0;}
+.section-title{font-family:Georgia,serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:500;letter-spacing:-0.02em;color:var(--dark-text);margin-bottom:12px;line-height:1.15;}
+.section-sub{font-size:1rem;color:var(--dark-soft);line-height:1.7;max-width:520px;}
+.divider{border:none;border-top:1px solid var(--dark-ring);margin:0;}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;
+  padding:120px 6vw 80px;position:relative;overflow:hidden;
+}
+.hero-blob{
+  position:absolute;border-radius:50%;pointer-events:none;
+}
+.hero-blob-1{width:600px;height:600px;top:-150px;left:-150px;background:radial-gradient(circle,rgba(47,106,143,0.18),transparent 65%);}
+.hero-blob-2{width:500px;height:500px;bottom:-100px;right:-120px;background:radial-gradient(circle,rgba(143,195,221,0.10),transparent 65%);}
+.orb{
+  width:80px;height:80px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(180deg,#A9DAF0 0%,#2F6A8F 100%);
+  box-shadow:0 0 60px rgba(143,195,221,0.25),0 16px 40px rgba(8,15,24,0.6);
+  position:relative;margin-bottom:28px;
+  animation:orbFloat 6s ease-in-out infinite;
+}
+@keyframes orbFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.orb::before{content:"";position:absolute;top:14px;left:14px;width:13px;height:13px;border-radius:50%;background:rgba(255,255,255,0.9);}
+.orb::after{content:"";position:absolute;top:-6px;right:-3px;width:13px;height:13px;border-radius:50%;background:#A9DAF0;}
+.hero h1{
+  font-family:Georgia,serif;font-size:clamp(2.6rem,7vw,5.2rem);
+  font-weight:500;letter-spacing:-0.03em;color:var(--dark-text);
+  line-height:1.05;margin-bottom:20px;max-width:780px;
+}
+.hero .tag{
+  font-family:Georgia,serif;font-style:italic;
+  font-size:clamp(1rem,2vw,1.2rem);color:var(--dark-soft);
+  margin-bottom:40px;
+}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-hero{
+  background:var(--dark-text);color:var(--ink);border:none;
+  font-size:15px;font-weight:600;padding:15px 32px;border-radius:100px;
+  cursor:pointer;box-shadow:0 8px 32px rgba(234,243,248,0.15);
+  transition:transform 0.2s,opacity 0.2s;text-decoration:none;
+}
+.btn-hero:hover{transform:translateY(-2px);opacity:0.92;}
+.btn-hero-ghost{
+  background:transparent;border:1px solid var(--dark-ring);color:var(--dark-soft);
+  font-size:15px;font-weight:500;padding:15px 32px;border-radius:100px;
+  cursor:pointer;transition:border-color 0.2s,color 0.2s;text-decoration:none;
+}
+.btn-hero-ghost:hover{border-color:var(--dark-soft);color:var(--dark-text);}
+.hero-note{margin-top:20px;font-size:12px;color:var(--dark-soft);opacity:0.7;}
+
+/* ── USE CASES SCROLL ── */
+.use-cases{padding:0 0 96px;}
+.use-cases-label{text-align:center;margin-bottom:40px;}
+.use-cases-label .section-title{margin-bottom:6px;}
+.uc-track-wrap{overflow:hidden;position:relative;}
+.uc-track-wrap::before,.uc-track-wrap::after{
+  content:"";position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none;
+}
+.uc-track-wrap::before{left:0;background:linear-gradient(to right,var(--dark),transparent);}
+.uc-track-wrap::after{right:0;background:linear-gradient(to left,var(--dark),transparent);}
+.uc-track{
+  display:flex;gap:16px;
+  animation:slide 28s linear infinite;
+  width:max-content;
+}
+.uc-track:hover{animation-play-state:paused;}
+@keyframes slide{from{transform:translateX(0);}to{transform:translateX(-50%)}}
+.uc-card{
+  background:var(--dark3);border:1px solid var(--dark-ring);border-radius:18px;
+  padding:22px;width:220px;flex-shrink:0;
+}
+.uc-tag{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--frost);font-weight:700;margin-bottom:10px;}
+.uc-icon{font-size:28px;margin-bottom:10px;}
+.uc-title{font-family:Georgia,serif;font-size:15px;font-weight:500;color:var(--dark-text);margin-bottom:6px;}
+.uc-desc{font-size:11px;color:var(--dark-soft);line-height:1.5;}
+
+/* ── REASONS ── */
+.reasons-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:16px;margin-top:48px;
+}
+.reason-card{
+  background:var(--dark3);border:1px solid var(--dark-ring);
+  border-radius:18px;padding:24px;
+  transition:border-color 0.2s;
+}
+.reason-card:hover{border-color:rgba(143,195,221,0.3);}
+.reason-icon{font-size:24px;margin-bottom:12px;}
+.reason-title{font-family:Georgia,serif;font-size:16px;font-weight:500;color:var(--dark-text);margin-bottom:6px;}
+.reason-desc{font-size:12px;color:var(--dark-soft);line-height:1.6;}
+
+/* ── HOW IT WORKS ── */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px;}
+@media(max-width:640px){.steps{grid-template-columns:1fr;}}
+.step{text-align:center;padding:0 8px;}
+.step-num{
+  width:36px;height:36px;border-radius:50%;background:var(--dark3);
+  border:1px solid var(--dark-ring);color:var(--frost);
+  font-size:13px;font-weight:700;display:flex;align-items:center;
+  justify-content:center;margin:0 auto 16px;
+}
+.step-icon{font-size:32px;margin-bottom:14px;}
+.step-title{font-family:Georgia,serif;font-size:17px;font-weight:500;color:var(--dark-text);margin-bottom:8px;}
+.step-desc{font-size:13px;color:var(--dark-soft);line-height:1.6;}
+.step-connector{display:flex;align-items:center;justify-content:center;padding-top:24px;color:var(--dark-ring);font-size:20px;}
+
+/* ── TRUST ── */
+.trust-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:48px;}
+@media(min-width:640px){.trust-grid{grid-template-columns:repeat(4,1fr);}}
+.trust-card{
+  background:var(--dark3);border:1px solid var(--dark-ring);
+  border-radius:14px;padding:20px 16px;text-align:center;
+}
+.trust-icon{font-size:22px;margin-bottom:10px;}
+.trust-title{font-size:13px;font-weight:600;color:var(--dark-text);margin-bottom:4px;}
+.trust-desc{font-size:11px;color:var(--dark-soft);line-height:1.5;}
+
+/* ── STATS ── */
+.stats-row{
+  display:flex;flex-wrap:wrap;gap:0;
+  border:1px solid var(--dark-ring);border-radius:18px;overflow:hidden;
+  margin-top:48px;
+}
+.stat{
+  flex:1;min-width:150px;padding:28px 20px;text-align:center;
+  border-right:1px solid var(--dark-ring);
+}
+.stat:last-child{border-right:none;}
+.stat-val{font-family:Georgia,serif;font-size:2.2rem;font-weight:500;color:var(--frost);margin-bottom:4px;}
+.stat-key{font-size:11px;color:var(--dark-soft);}
+
+/* ── TESTIMONIALS ── */
+.testi-track-wrap{overflow:hidden;position:relative;margin-top:56px;}
+.testi-track-wrap::before,.testi-track-wrap::after{
+  content:"";position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none;
+}
+.testi-track-wrap::before{left:0;background:linear-gradient(to right,var(--dark),transparent);}
+.testi-track-wrap::after{right:0;background:linear-gradient(to left,var(--dark),transparent);}
+.testi-track{
+  display:flex;gap:16px;
+  animation:slide 36s linear infinite;
+  width:max-content;
+}
+.testi-track:hover{animation-play-state:paused;}
+.testi-card{
+  background:var(--dark3);border:1px solid var(--dark-ring);
+  border-radius:16px;padding:20px;width:280px;flex-shrink:0;
+}
+.testi-quote{font-size:13px;color:var(--dark-text);line-height:1.65;margin-bottom:14px;font-style:italic;}
+.testi-author{display:flex;align-items:center;gap:10px;}
+.testi-avatar{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--frost-deep);color:#fff;font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.testi-name{font-size:11px;font-weight:600;color:var(--dark-text);}
+.testi-when{font-size:10px;color:var(--dark-soft);}
+
+/* ── FAQ ── */
+.faq-list{margin-top:48px;display:flex;flex-direction:column;gap:10px;}
+.faq-item{
+  background:var(--dark3);border:1px solid var(--dark-ring);
+  border-radius:14px;overflow:hidden;
+}
+.faq-q{
+  padding:16px 18px;font-size:14px;font-weight:600;color:var(--dark-text);
+  cursor:pointer;display:flex;justify-content:space-between;align-items:center;
+  user-select:none;
+}
+.faq-q:hover{color:var(--frost);}
+.faq-icon{font-size:16px;color:var(--dark-soft);transition:transform 0.2s;flex-shrink:0;}
+.faq-a{
+  max-height:0;overflow:hidden;
+  font-size:13px;color:var(--dark-soft);line-height:1.65;
+  transition:max-height 0.3s ease,padding 0.3s;
+  padding:0 18px;
+}
+.faq-item.open .faq-a{max-height:200px;padding:0 18px 16px;}
+.faq-item.open .faq-icon{transform:rotate(45deg);}
+
+/* ── CTA BANNER ── */
+.cta-banner{
+  background:linear-gradient(135deg,var(--dark3) 0%,var(--dark2) 100%);
+  border:1px solid var(--dark-ring);border-radius:24px;
+  padding:64px 48px;text-align:center;position:relative;overflow:hidden;
+  margin:0 6vw;
+}
+.cta-banner::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 30% 40%,rgba(47,106,143,0.15),transparent 60%),
+             radial-gradient(circle at 70% 60%,rgba(143,195,221,0.08),transparent 60%);
+}
+.cta-banner > *{position:relative;z-index:1;}
+.cta-banner .eyebrow{margin-bottom:12px;}
+.cta-banner h2{font-family:Georgia,serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:500;color:var(--dark-text);margin-bottom:10px;letter-spacing:-0.02em;}
+.cta-banner p{color:var(--dark-soft);margin-bottom:32px;font-size:1rem;}
+
+/* ── FOOTER ── */
+footer{
+  border-top:1px solid var(--dark-ring);
+  padding:48px 6vw 36px;
+  display:flex;flex-wrap:wrap;gap:32px;justify-content:space-between;align-items:flex-start;
+}
+.footer-brand{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--dark-text);margin-bottom:8px;}
+.footer-tagline{font-size:12px;color:var(--dark-soft);}
+.footer-links{display:flex;flex-wrap:wrap;gap:16px;}
+.footer-links a{font-size:12px;color:var(--dark-soft);text-decoration:none;transition:color 0.15s;}
+.footer-links a:hover{color:var(--dark-text);}
+.footer-copy{font-size:11px;color:var(--dark-soft);opacity:0.6;margin-top:6px;}
+@media(max-width:640px){
+  .nav-links{display:none;}
+  .steps{grid-template-columns:1fr;}
+  .stats-row{flex-direction:column;}
+  .stat{border-right:none;border-bottom:1px solid var(--dark-ring);}
+  .stat:last-child{border-bottom:none;}
+  .cta-banner{padding:40px 24px;margin:0 4vw;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand"><div class="nav-dot"></div>Cyro</div>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#trust">Why trust us</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <a class="nav-cta" href="cyro-app.html">Seal a capsule</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="orb"></div>
+  <h1>Seal a message for your child's 18th birthday — starting today.</h1>
+  <p class="tag">A promise that doesn't expire.</p>
+  <div class="hero-btns">
+    <a class="btn-hero" href="cyro-app.html">Seal your first capsule</a>
+    <a class="btn-hero-ghost" href="#how">How it works</a>
+  </div>
+  <p class="hero-note">One payment · No subscription · Backed up forever</p>
+</section>
+
+<!-- USE CASES SCROLL -->
+<section class="use-cases">
+  <div class="use-cases-label">
+    <p class="eyebrow">Infinite ideas, one concept</p>
+    <h2 class="section-title">And you — what will you seal?</h2>
+  </div>
+  <div class="uc-track-wrap">
+    <div class="uc-track">
+      <div class="uc-card"><div class="uc-tag">Personal</div><div class="uc-icon">🪞</div><div class="uc-title">For yourself</div><div class="uc-desc">Write to yourself to remember who you were, what you hoped for, and what really mattered.</div></div>
+      <div class="uc-card"><div class="uc-tag">Love</div><div class="uc-icon">💌</div><div class="uc-title">For your loved one</div><div class="uc-desc">Entrust a declaration of love to the future — proof of something that will never fade.</div></div>
+      <div class="uc-card"><div class="uc-tag">Family</div><div class="uc-icon">👶</div><div class="uc-title">For your child at 18</div><div class="uc-desc">Leave them a message from today, to discover the day they become an adult.</div></div>
+      <div class="uc-card"><div class="uc-tag">Wedding</div><div class="uc-icon">💍</div><div class="uc-title">For a wedding</div><div class="uc-desc">A message from the heart, sealed on the day, opened on an anniversary.</div></div>
+      <div class="uc-card"><div class="uc-tag">Celebration</div><div class="uc-icon">🎂</div><div class="uc-title">For a birthday</div><div class="uc-desc">Sealed on one birthday, opened on a later one — a gift across time.</div></div>
+      <div class="uc-card"><div class="uc-tag">Professional</div><div class="uc-icon">💼</div><div class="uc-title">For your projects</div><div class="uc-desc">Preserve the original intention so you never lose sight of why you started.</div></div>
+      <div class="uc-card"><div class="uc-tag">Legacy</div><div class="uc-icon">🌍</div><div class="uc-title">For collective memory</div><div class="uc-desc">Witness your era so the future can understand what it meant to live today.</div></div>
+      <div class="uc-card"><div class="uc-tag">Fun</div><div class="uc-icon">🎲</div><div class="uc-title">For fun</div><div class="uc-desc">A prediction, a dare, a surprise — a wink from the present to the future.</div></div>
+      <!-- duplicate for infinite loop -->
+      <div class="uc-card"><div class="uc-tag">Personal</div><div class="uc-icon">🪞</div><div class="uc-title">For yourself</div><div class="uc-desc">Write to yourself to remember who you were, what you hoped for, and what really mattered.</div></div>
+      <div class="uc-card"><div class="uc-tag">Love</div><div class="uc-icon">💌</div><div class="uc-title">For your loved one</div><div class="uc-desc">Entrust a declaration of love to the future — proof of something that will never fade.</div></div>
+      <div class="uc-card"><div class="uc-tag">Family</div><div class="uc-icon">👶</div><div class="uc-title">For your child at 18</div><div class="uc-desc">Leave them a message from today, to discover the day they become an adult.</div></div>
+      <div class="uc-card"><div class="uc-tag">Wedding</div><div class="uc-icon">💍</div><div class="uc-title">For a wedding</div><div class="uc-desc">A message from the heart, sealed on the day, opened on an anniversary.</div></div>
+      <div class="uc-card"><div class="uc-tag">Celebration</div><div class="uc-icon">🎂</div><div class="uc-title">For a birthday</div><div class="uc-desc">Sealed on one birthday, opened on a later one — a gift across time.</div></div>
+      <div class="uc-card"><div class="uc-tag">Professional</div><div class="uc-icon">💼</div><div class="uc-title">For your projects</div><div class="uc-desc">Preserve the original intention so you never lose sight of why you started.</div></div>
+      <div class="uc-card"><div class="uc-tag">Legacy</div><div class="uc-icon">🌍</div><div class="uc-title">For collective memory</div><div class="uc-desc">Witness your era so the future can understand what it meant to live today.</div></div>
+      <div class="uc-card"><div class="uc-tag">Fun</div><div class="uc-icon">🎲</div><div class="uc-title">For fun</div><div class="uc-desc">A prediction, a dare, a surprise — a wink from the present to the future.</div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how">
+  <div class="wrap">
+    <p class="eyebrow">The journey to the future</p>
+    <h2 class="section-title">Created now, revealed at the chosen moment.</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-icon">✍️</div>
+        <div class="step-title">Write it</div>
+        <div class="step-desc">A message, a photo, a prediction — anything that matters to you right now. This is the version of you that will speak to the future.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-icon">🔒</div>
+        <div class="step-title">Seal it</div>
+        <div class="step-desc">Choose the exact date it opens and who receives it. Once sealed, nothing can be changed — not even by us. Cy holds it from here.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-icon">✨</div>
+        <div class="step-title">Reveal it</div>
+        <div class="step-desc">On the day you chose, the capsule unlocks. A moment that means something because it waited — and because someone kept the promise.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- TRUST -->
+<section class="section" id="trust">
+  <div class="wrap">
+    <p class="eyebrow">Built to be trusted with the long wait</p>
+    <h2 class="section-title">Reliable, trusted, endless.</h2>
+    <p class="section-sub">We built Cyro around one question: what would it take for someone to trust us with a message meant for 18 years from now?</p>
+    <div class="trust-grid">
+      <div class="trust-card"><div class="trust-icon">🔐</div><div class="trust-title">Sealed & encrypted</div><div class="trust-desc">Locked and immutable from the moment you seal it. Not even we can open it early.</div></div>
+      <div class="trust-card"><div class="trust-icon">💾</div><div class="trust-title">Yours to keep</div><div class="trust-desc">Download everything on opening day in standard formats. The best copy is the one in your hands.</div></div>
+      <div class="trust-card"><div class="trust-icon">🌐</div><div class="trust-title">We won't go dark</div><div class="trust-desc">If we ever wind down, we release your capsules early — not a dead link, your memories back.</div></div>
+      <div class="trust-card"><div class="trust-icon">💳</div><div class="trust-title">One payment</div><div class="trust-desc">Pay once when you seal. No recurring bill, no subscription, no surprise charges years later.</div></div>
+    </div>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-val">1,247</div><div class="stat-key">Capsules sealed</div></div>
+      <div class="stat"><div class="stat-val">18yr</div><div class="stat-key">Longest lock</div></div>
+      <div class="stat"><div class="stat-val">0</div><div class="stat-key">Early opens</div></div>
+      <div class="stat"><div class="stat-val">100%</div><div class="stat-key">Promises kept</div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- TESTIMONIALS -->
+<section class="section">
+  <div class="wrap">
+    <p class="eyebrow">What our users say</p>
+    <h2 class="section-title">Join people preserving their stories for the future.</h2>
+  </div>
+  <div class="testi-track-wrap" style="margin-top:0">
+    <div class="testi-track">
+      <div class="testi-card"><div class="testi-quote">"I made a capsule for my daughter's 18th birthday. I teared up just writing it — can't imagine what opening day will feel like."</div><div class="testi-author"><div class="testi-avatar">E</div><div><div class="testi-name">Elise</div><div class="testi-when">3 weeks ago</div></div></div></div>
+      <div class="testi-card"><div class="testi-quote">"Our whole friend group sealed one before we all moved apart. Ten years from now is going to be something else."</div><div class="testi-author"><div class="testi-avatar">J</div><div><div class="testi-name">James</div><div class="testi-when">1 year ago</div></div></div></div>
+      <div class="testi-card"><div class="testi-quote">"After every big trip I lock a few memories away for five years later. It's like getting to live it twice."</div><div class="testi-author"><div class="testi-avatar">C</div><div><div class="testi-name">Camille</div><div class="testi-when">4 months ago</div></div></div></div>
+      <div class="testi-card"><div class="testi-quote">"I keep company milestones in here. Reading back where we started a few years later puts everything in perspective."</div><div class="testi-author"><div class="testi-avatar">M</div><div><div class="testi-name">Michael</div><div class="testi-when">8 months ago</div></div></div></div>
+      <div class="testi-card"><div class="testi-quote">"I sealed my very first demo recording. Five years from now I'm going to be a wreck opening this."</div><div class="testi-author"><div class="testi-avatar">T</div><div><div class="testi-name">Theo</div><div class="testi-when">5 months ago</div></div></div></div>
+      <div class="testi-card"><div class="testi-quote">"I wrote a message for the day I retire. It hit me emotionally way harder than I expected."</div><div class="testi-author"><div class="testi-avatar">L</div><div><div class="testi-name">Liam</div><div class="testi-when">6 months ago</div></div></div></div>
+      <div class="testi-card"><div class="testi-quote">"What I love is that it stays simple and my stuff is genuinely safe. You don't need to be technical to use it."</div><div class="testi-author"><div class="testi-avatar">S</div><div><div class="testi-name">Sarah</div><div class="testi-when">1 year ago</div></div></div></div>
+      <div class="testi-card"><div class="testi-quote">"My kids made a class capsule and they keep asking when they can open it. I've never seen them this invested in anything."</div><div class="testi-author"><div class="testi-avatar">C</div><div><div class="testi-name">Chloe</div><div class="testi-when">3 weeks ago</div></div></div></div>
+      <!-- duplicate -->
+      <div class="testi-card"><div class="testi-quote">"I made a capsule for my daughter's 18th birthday. I teared up just writing it — can't imagine what opening day will feel like."</div><div class="testi-author"><div class="testi-avatar">E</div><div><div class="testi-name">Elise</div><div class="testi-when">3 weeks ago</div></div></div></div>
+      <div class="testi-card"><div class="testi-quote">"Our whole friend group sealed one before we all moved apart. Ten years from now is going to be something else."</div><div class="testi-author"><div class="testi-avatar">J</div><div><div class="testi-name">James</div><div class="testi-when">1 year ago</div></div></div></div>
+      <div class="testi-card"><div class="testi-quote">"After every big trip I lock a few memories away for five years later. It's like getting to live it twice."</div><div class="testi-author"><div class="testi-avatar">C</div><div><div class="testi-name">Camille</div><div class="testi-when">4 months ago</div></div></div></div>
+      <div class="testi-card"><div class="testi-quote">"I keep company milestones in here. Reading back where we started a few years later puts everything in perspective."</div><div class="testi-author"><div class="testi-avatar">M</div><div><div class="testi-name">Michael</div><div class="testi-when">8 months ago</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="wrap">
+    <p class="eyebrow">Frequently asked questions</p>
+    <h2 class="section-title">Everything you need to know.</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">What is Cyro? <span class="faq-icon">+</span></div>
+        <div class="faq-a">Cyro is a digital time capsule app. You write a message, add photos or a prediction, choose an unlock date, and seal it. Nothing can be opened before that date — not by you, not by us. On the day you chose, it unlocks and delivers itself.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Can I send a capsule to someone else? <span class="faq-icon">+</span></div>
+        <div class="faq-a">Yes. When creating a capsule you can choose "someone else" and add their email. They'll receive a notification that a capsule is waiting, and another when it unlocks on the chosen date.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Can I edit a capsule after sealing it? <span class="faq-icon">+</span></div>
+        <div class="faq-a">No. Like a time capsule buried underground, once sealed it cannot be changed. That's the point — the version of you that sealed it is preserved exactly as it was.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">What happens if Cyro shuts down? <span class="faq-icon">+</span></div>
+        <div class="faq-a">We'd never just disappear with your capsules. If we ever had to wind down, we commit to warning you in advance and releasing every pending capsule early — your messages delivered, not lost. The most durable copy is the one you download on opening day, and we make sure you get it.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Will my capsule survive 10 or 20 years? <span class="faq-icon">+</span></div>
+        <div class="faq-a">We've built on durable infrastructure and take preservation seriously. We won't make unbackable permanence claims — but what we can promise is: on opening day you download everything in standard formats and keep your own copy. The best insurance is the one in your hands.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">How much does it cost? <span class="faq-icon">+</span></div>
+        <div class="faq-a">One payment when you seal a capsule. No subscription, no recurring bill, no surprise charges years later. You seal it, you own it.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-banner">
+  <p class="eyebrow">What if it was now?</p>
+  <h2>Time doesn't erase everything.</h2>
+  <p>Lock the present. Reveal it in the future.</p>
+  <a class="btn-hero" href="cyro-app.html">Seal a capsule →</a>
+</div>
+
+<div style="height:80px"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-brand"><div class="nav-dot"></div>Cyro</div>
+    <div class="footer-tagline">A promise that doesn't expire.</div>
+    <div class="footer-copy" style="margin-top:12px">© 2026 Cyro. All rights reserved.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#how">How it works</a>
+    <a href="#trust">Why trust us</a>
+    <a href="#faq">FAQ</a>
+    <a href="#">Pricing</a>
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<script>
+function toggleFaq(el){
+  const item=el.closest('.faq-item');
+  const isOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));
+  if(!isOpen) item.classList.add('open');
+}
+</script>
+</body>
+</html>
