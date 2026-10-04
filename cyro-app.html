@@ -15,7 +15,78 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;background:var(--ice);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;}
 
+/* ── IN-APP ALERT BANNER ── */
+.alert-banner{
+  display:none;background:linear-gradient(135deg,var(--frost-deep),#1a4a6a);
+  border-radius:14px;padding:14px 16px;margin:0 24px 16px;
+  cursor:pointer;animation:fadeIn 0.3s ease;
+}
+.alert-banner.show{display:flex;align-items:center;gap:12px;}
+.ab-icon{font-size:22px;flex-shrink:0;}
+.ab-title{font-size:13px;font-weight:600;color:#fff;}
+.ab-sub{font-size:11px;color:rgba(255,255,255,0.75);margin-top:2px;}
+.ab-close{font-size:16px;color:rgba(255,255,255,0.5);margin-left:auto;flex-shrink:0;cursor:pointer;}
+
+/* ── STREAK ── */
+.streak-bar{
+  background:var(--paper);border:1.5px solid var(--ring);
+  border-radius:14px;padding:16px;margin-bottom:16px;
+  display:flex;align-items:center;gap:14px;
+}
+.streak-flame{font-size:28px;}
+.streak-val{font-family:Georgia,serif;font-size:24px;font-weight:500;color:var(--frost-deep);}
+.streak-label{font-size:11px;color:var(--ink-soft);margin-top:2px;}
+.streak-months{display:flex;gap:4px;margin-top:12px;}
+.streak-month{
+  flex:1;height:28px;border-radius:6px;background:var(--ring);
+  display:flex;align-items:center;justify-content:center;
+  font-size:8px;color:var(--ink-soft);font-weight:600;
+  transition:all 0.2s;
+}
+.streak-month.done{background:var(--frost-deep);color:#fff;}
+.streak-month.current{background:var(--ice1);border:1.5px solid var(--frost-deep);color:var(--frost-deep);}
+
+/* ── PROGRESS MAP ── */
+.progress-map{margin-bottom:20px;}
+.pm-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.pm-title{font-size:13px;font-weight:600;color:var(--ink);}
+.pm-pct{font-family:Georgia,serif;font-size:18px;font-weight:500;color:var(--frost-deep);}
+.pm-track{position:relative;padding:0 0 0 28px;}
+.pm-line{
+  position:absolute;left:9px;top:8px;bottom:8px;width:2px;
+  background:var(--ring);border-radius:1px;
+}
+.pm-fill{
+  position:absolute;left:9px;top:8px;width:2px;
+  background:var(--frost-deep);border-radius:1px;
+  transition:height 0.6s ease;
+}
+.pm-node{
+  display:flex;align-items:flex-start;gap:14px;
+  margin-bottom:20px;position:relative;
+}
+.pm-dot{
+  width:20px;height:20px;border-radius:50%;border:2px solid var(--ring);
+  background:var(--paper);flex-shrink:0;margin-top:0px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;position:relative;z-index:1;transition:all 0.3s;
+}
+.pm-dot.done{background:var(--frost-deep);border-color:var(--frost-deep);color:#fff;}
+.pm-dot.current{background:var(--ice1);border-color:var(--frost-deep);animation:nodePulse 2s ease infinite;}
+@keyframes nodePulse{0%,100%{box-shadow:0 0 0 0 rgba(47,106,143,0.3);}50%{box-shadow:0 0 0 6px rgba(47,106,143,0);}}
+.pm-content{flex:1;padding-top:1px;}
+.pm-node-label{font-size:12px;font-weight:600;color:var(--ink-soft);}
+.pm-node-label.done{color:var(--frost-deep);}
+.pm-node-label.current{color:var(--ink);}
+.pm-node-msg{
+  font-size:11px;color:var(--ink-soft);margin-top:4px;line-height:1.5;
+  background:var(--ice1);border-radius:8px;padding:8px 10px;
+  display:none;
+}
+.pm-node-msg.show{display:block;}
+
 /* ── LAYOUT ── */
+
 .app{max-width:520px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;padding:0 0 40px;}
 
 /* ── NAV ── */
@@ -282,7 +353,10 @@ h1{font-family:Georgia,serif;font-weight:500;font-size:1.75rem;letter-spacing:-0
     <a class="nav-brand" href="#" onclick="go('s-home')">
       <div class="nav-dot"></div>Cyro
     </a>
-    <div class="nav-step" id="nav-step"></div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="nav-step" id="nav-step"></div>
+      <button class="btn btn-ghost btn-sm" onclick="go('s-feedback')" style="font-size:11px;padding:6px 12px;width:auto">💬 Feedback</button>
+    </div>
   </nav>
 
   <!-- PROGRESS -->
@@ -290,10 +364,33 @@ h1{font-family:Georgia,serif;font-weight:500;font-size:1.75rem;letter-spacing:-0
     <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
   </div>
 
+  <!-- ALERT BANNER -->
+  <div class="alert-banner" id="alert-banner" onclick="dismissAlert()">
+    <div class="ab-icon" id="ab-icon">🔔</div>
+    <div>
+      <div class="ab-title" id="ab-title">Cy has a message for you</div>
+      <div class="ab-sub" id="ab-sub"></div>
+    </div>
+    <div class="ab-close" onclick="dismissAlert()">✕</div>
+  </div>
+
   <!-- ══ HOME ══ -->
   <div class="screen active" id="s-home">
     <h1>What will you<br>seal today?</h1>
     <p class="sub">Lock a message, photo, or prediction until the exact date you choose.<br>A promise that doesn't expire.</p>
+
+    <!-- STREAK -->
+    <div class="streak-bar" id="streak-bar" style="display:none">
+      <div class="streak-flame">🔥</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:baseline;gap:6px">
+          <div class="streak-val" id="streak-val">0</div>
+          <div class="streak-label">month streak</div>
+        </div>
+        <div class="streak-months" id="streak-months"></div>
+      </div>
+    </div>
+
     <div class="btn-row">
       <button class="btn btn-primary" onclick="startCreate()">🔒 Seal a new capsule</button>
       <button class="btn btn-ghost" onclick="go('s-mycapsules')">📦 My capsules</button>
@@ -486,13 +583,61 @@ h1{font-family:Georgia,serif;font-weight:500;font-size:1.75rem;letter-spacing:-0
     <div class="detail-locked-notice">
       🔒 <span>This capsule is sealed. The message below will only display after you confirm you're ready to reveal it.</span>
     </div>
+
+    <!-- PROGRESS MAP -->
+    <div class="progress-map" id="detail-progress-map"></div>
+
     <div class="detail-msg" id="detail-msg" style="display:none"></div>
     <button class="btn btn-ghost" id="reveal-btn" onclick="revealMessage()" style="margin-bottom:10px">👁 I'm ready — show me the message</button>
     <button class="btn btn-ghost" onclick="go('s-mycapsules')">← Back to my capsules</button>
   </div>
 
-</div>
+  <!-- ══ FEEDBACK ══ -->
+  <div class="screen" id="s-feedback">
+    <h1>Report an issue</h1>
+    <p class="sub">Something broken or confusing? Tell us.</p>
+    <div class="field">
+      <label>Type</label>
+      <select id="fb-type">
+        <option value="bug">🐛 Bug — something is broken</option>
+        <option value="ux">😕 Confusing — I didn't know what to do</option>
+        <option value="missing">❓ Missing — something I expected isn't here</option>
+        <option value="other">💬 Other feedback</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>What happened?</label>
+      <textarea id="fb-desc" placeholder="Describe what went wrong or what confused you…" style="min-height:120px"></textarea>
+    </div>
+    <div class="field">
+      <label>What were you trying to do?</label>
+      <input type="text" id="fb-context" placeholder="e.g. I was trying to seal a capsule and…">
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="submitFeedback()">Submit feedback</button>
+      <button class="btn btn-ghost" onclick="go('s-home')">← Back</button>
+    </div>
+  </div>
 
+  <!-- ══ FEEDBACK SENT ══ -->
+  <div class="screen" id="s-fb-sent" style="text-align:center;padding-top:80px;">
+    <div style="font-size:48px;margin-bottom:16px;">✅</div>
+    <h1 style="margin-bottom:8px;">Got it.</h1>
+    <p class="sub" style="max-width:300px;margin:0 auto 28px;">Thanks for the report. It's saved and we'll look into it.</p>
+    <button class="btn btn-primary" onclick="go('s-home')">Back to home</button>
+    <p class="skip" style="margin-top:12px;cursor:pointer;" onclick="go('s-fbadmin')">View all feedback (admin)</p>
+  </div>
+
+  <!-- ══ FEEDBACK ADMIN ══ -->
+  <div class="screen" id="s-fbadmin">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <h1 style="font-size:1.4rem;margin-bottom:0;">Feedback log</h1>
+      <button class="btn btn-ghost btn-sm" onclick="clearFeedback()" style="font-size:11px;padding:6px 12px;width:auto;color:var(--err)">Clear all</button>
+    </div>
+    <p class="sub" style="margin-bottom:16px;">All issues reported by users.</p>
+    <div id="fb-list"></div>
+    <button class="btn btn-ghost" onclick="go('s-home')" style="margin-top:8px;">← Back to home</button>
+  </div>
 <script>
 // ── STATE ──
 let draft = {};
@@ -724,6 +869,7 @@ function sealCapsule(){
         sealedAt: new Date().toISOString(),
       };
       saveCapsule(capsule);
+      renderStreak();
       document.getElementById('sealed-days').textContent = draft.daysAway;
       setTimeout(()=>go('s-sealed'),400);
     }
@@ -792,6 +938,7 @@ function showDetail(id){
   document.getElementById('reveal-btn').textContent='👁 I\'m ready — show me the message';
   document.getElementById('reveal-btn').style.display='block';
   go('s-detail');
+  buildProgressMap(capsule);
 }
 
 function revealMessage(){
@@ -806,8 +953,216 @@ function revealMessage(){
   }
 }
 
+// ── FEEDBACK ──
+function getFeedback(){
+  try{ return JSON.parse(localStorage.getItem('cyro_feedback')||'[]'); }
+  catch{ return []; }
+}
+
+function submitFeedback(){
+  const type = document.getElementById('fb-type').value;
+  const desc = document.getElementById('fb-desc').value.trim();
+  const context = document.getElementById('fb-context').value.trim();
+  if(!desc) return;
+  const list = getFeedback();
+  list.push({
+    id: Date.now().toString(),
+    type, desc, context,
+    submittedAt: new Date().toISOString()
+  });
+  localStorage.setItem('cyro_feedback', JSON.stringify(list));
+  document.getElementById('fb-type').value = 'bug';
+  document.getElementById('fb-desc').value = '';
+  document.getElementById('fb-context').value = '';
+  go('s-fb-sent');
+}
+
+function renderFeedback(){
+  const list = getFeedback();
+  const container = document.getElementById('fb-list');
+  if(!list.length){
+    container.innerHTML='<div class="empty-state"><div class="empty-icon">🎉</div><div class="empty-title">No issues yet</div><div class="empty-sub">Nothing reported so far.</div></div>';
+    return;
+  }
+  const TYPE_LABELS = {bug:'🐛 Bug',ux:'😕 Confusing',missing:'❓ Missing',other:'💬 Other'};
+  container.innerHTML='';
+  list.slice().reverse().forEach(f=>{
+    const div=document.createElement('div');
+    div.className='capsule-item';
+    div.style.cursor='default';
+    div.innerHTML=`
+      <div class="ci-body" style="min-width:0">
+        <div class="ci-date">${TYPE_LABELS[f.type]||f.type} · ${new Date(f.submittedAt).toLocaleDateString()}</div>
+        <div class="ci-title" style="white-space:normal">${f.desc}</div>
+        ${f.context?`<div class="ci-meta">While: ${f.context}</div>`:''}
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+function clearFeedback(){
+  if(confirm('Clear all feedback? This cannot be undone.')){
+    localStorage.removeItem('cyro_feedback');
+    renderFeedback();
+  }
+}
+
+const _origGo = go;
+go = function(id){
+  _origGo(id);
+  if(id==='s-fbadmin') renderFeedback();
+};
+
+// ── STREAK ──
+const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function getStreak(){
+  try{ return JSON.parse(localStorage.getItem('cyro_streak')||'{"months":[],"last":null}'); }
+  catch{ return {months:[],last:null}; }
+}
+
+function updateStreak(){
+  const capsules = getCapsules();
+  if(!capsules.length) return;
+  const sealedMonths = [...new Set(capsules.map(c=>{
+    const d = new Date(c.sealedAt);
+    return d.getFullYear()+'-'+(d.getMonth()+1);
+  }))].sort();
+  const streak = {months: sealedMonths, last: sealedMonths[sealedMonths.length-1]};
+  localStorage.setItem('cyro_streak', JSON.stringify(streak));
+  return streak;
+}
+
+function renderStreak(){
+  const streak = updateStreak();
+  if(!streak||!streak.months.length) return;
+  const bar = document.getElementById('streak-bar');
+  bar.style.display='flex';
+  const now = new Date();
+  const currentKey = now.getFullYear()+'-'+(now.getMonth()+1);
+  let count = 0;
+  // count consecutive months ending now
+  let check = new Date(now.getFullYear(), now.getMonth(), 1);
+  while(true){
+    const key = check.getFullYear()+'-'+(check.getMonth()+1);
+    if(streak.months.includes(key)){ count++; check.setMonth(check.getMonth()-1); }
+    else break;
+    if(count>12) break;
+  }
+  document.getElementById('streak-val').textContent = count;
+  // render last 6 months
+  const monthsEl = document.getElementById('streak-months');
+  monthsEl.innerHTML='';
+  for(let i=5;i>=0;i--){
+    const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+    const key = d.getFullYear()+'-'+(d.getMonth()+1);
+    const isCurrent = key===currentKey;
+    const isDone = streak.months.includes(key) && !isCurrent;
+    const el = document.createElement('div');
+    el.className='streak-month'+(isDone?' done':isCurrent?' current':'');
+    el.textContent = MONTHS_SHORT[d.getMonth()];
+    monthsEl.appendChild(el);
+  }
+}
+
+// ── PROGRESS MAP ──
+const MILESTONES = [
+  {pct:0,  label:'Sealed today', msg:'Cy gave it one last hug before locking it away. It\'s safe now.'},
+  {pct:25, label:'25% of the wait', msg:'A quarter of the journey done. Cy is holding steady.'},
+  {pct:50, label:'Halfway there', msg:'You\'re at the midpoint. The wait is half over — and so is the anticipation.'},
+  {pct:75, label:'75% of the wait', msg:'Almost there. Cy can feel the unlock day getting closer.'},
+  {pct:100,label:'Ready to open', msg:'The day has arrived. Cy is ready to hand it back.'},
+];
+
+function buildProgressMap(capsule){
+  const sealed = new Date(capsule.sealedAt);
+  const unlock = new Date(capsule.unlockDate);
+  const now = new Date();
+  const total = unlock - sealed;
+  const elapsed = Math.min(now - sealed, total);
+  const pct = Math.round((elapsed/total)*100);
+
+  const map = document.getElementById('detail-progress-map');
+  if(!map) return;
+
+  const filledNodes = MILESTONES.filter(m=>pct>=m.pct).length;
+  const lineHeight = Math.min(pct, 99);
+
+  let html = `
+    <div class="pm-header">
+      <div class="pm-title">Cy's journey</div>
+      <div class="pm-pct">${pct}%</div>
+    </div>
+    <div class="pm-track">
+      <div class="pm-line"></div>
+      <div class="pm-fill" style="height:${lineHeight}%"></div>
+  `;
+
+  MILESTONES.forEach((m,i)=>{
+    const done = pct > m.pct;
+    const current = pct >= m.pct && (i===MILESTONES.length-1 || pct < MILESTONES[i+1].pct);
+    const cls = done?'done':current?'current':'';
+    html += `
+      <div class="pm-node">
+        <div class="pm-dot ${cls}">${done?'✓':current?'●':''}</div>
+        <div class="pm-content">
+          <div class="pm-node-label ${cls}">${m.label}</div>
+          ${(done||current)?`<div class="pm-node-msg show">${m.msg}</div>`:''}
+        </div>
+      </div>`;
+  });
+
+  html += '</div>';
+  map.innerHTML = html;
+}
+
+// ── MILESTONE ALERT BANNER ──
+const CY_MESSAGES = [
+  {pct:0,  icon:'🔒', title:'Just sealed!', sub:'Cy is holding your capsule safe.'},
+  {pct:25, icon:'⏳', title:'A quarter of the way there', sub:'Cy wanted you to know — the wait is 25% done.'},
+  {pct:50, icon:'🌊', title:'Halfway there', sub:'Your capsule is at the midpoint. Cy says hi.'},
+  {pct:75, icon:'✨', title:'Almost time', sub:'75% of the wait is over. Not long now.'},
+  {pct:100,icon:'🎉', title:'Ready to open!', sub:'Your capsule is ready. Tap to reveal it.'},
+];
+
+function checkMilestoneAlerts(){
+  const capsules = getCapsules();
+  if(!capsules.length) return;
+  const seen = JSON.parse(localStorage.getItem('cyro_seen_milestones')||'{}');
+  for(const c of capsules){
+    const sealed = new Date(c.sealedAt);
+    const unlock = new Date(c.unlockDate);
+    const now = new Date();
+    const total = unlock - sealed;
+    const elapsed = Math.min(now - sealed, total);
+    const pct = Math.round((elapsed/total)*100);
+    for(const m of CY_MESSAGES){
+      const key = c.id+'_'+m.pct;
+      if(pct >= m.pct && !seen[key]){
+        seen[key] = true;
+        localStorage.setItem('cyro_seen_milestones', JSON.stringify(seen));
+        showAlert(m.icon, m.title, `"${c.title}" — ${m.sub}`);
+        return;
+      }
+    }
+  }
+}
+
+function showAlert(icon, title, sub){
+  document.getElementById('ab-icon').textContent = icon;
+  document.getElementById('ab-title').textContent = title;
+  document.getElementById('ab-sub').textContent = sub;
+  document.getElementById('alert-banner').classList.add('show');
+}
+
+function dismissAlert(){
+  document.getElementById('alert-banner').classList.remove('show');
+}
+
 // ── INIT ──
 renderCal();
+renderStreak();
+checkMilestoneAlerts();
 </script>
 </body>
 </html>
