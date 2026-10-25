@@ -343,7 +343,97 @@ h1{font-family:Georgia,serif;font-weight:500;font-size:1.75rem;letter-spacing:-0
 .btn-ghost:hover{border-color:var(--ink-soft);color:var(--ink);}
 .btn-sm{font-size:13px;padding:10px 20px;width:auto;}
 .btn-row{display:flex;flex-direction:column;gap:10px;margin-top:8px;}
+
+/* ── THAW ── */
+.thaw{position:fixed;inset:0;z-index:200;display:none;overflow:hidden;color:#fff;touch-action:none;user-select:none;-webkit-user-select:none;}
+.thaw.show{display:block;animation:thawIn .5s ease;}
+@keyframes thawIn{from{opacity:0}to{opacity:1}}
+.thaw-bg,.thaw-bg-warm{position:absolute;inset:0;transition:opacity 1.6s ease;}
+.thaw-bg{background:radial-gradient(ellipse at 50% 38%,#14405f 0%,#0a1b2c 55%,#080F18 100%);}
+.thaw-bg-warm{background:radial-gradient(ellipse at 50% 42%,#f3c07e 0%,#c98250 38%,#3d2427 100%);opacity:0;}
+.thaw.warm .thaw-bg-warm{opacity:1;}
+#thaw-snow{position:absolute;inset:0;width:100%;height:100%;transition:opacity 1.6s ease;pointer-events:none;}
+.thaw.warm #thaw-snow{opacity:0;}
+.thaw-close{position:absolute;top:18px;right:18px;z-index:5;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;font-size:16px;cursor:pointer;backdrop-filter:blur(6px);}
+.thaw-top{position:absolute;top:22px;left:0;right:0;text-align:center;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.55);}
+.thaw-stage{position:absolute;left:50%;top:44%;width:260px;height:260px;margin:-130px 0 0 -130px;transition:opacity 1s ease,transform 1.1s ease;cursor:pointer;outline:none;-webkit-tap-highlight-color:transparent;}
+.thaw.melt .thaw-stage{opacity:0;transform:scale(.55);pointer-events:none;}
+.thaw-ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);overflow:visible;}
+.thaw-ring circle{fill:none;stroke-width:3;stroke-linecap:round;}
+.thaw-ring .track{stroke:rgba(255,255,255,.12);}
+.thaw-ring .fill{stroke:#A9DAF0;filter:drop-shadow(0 0 8px rgba(169,218,240,.9));stroke-dasharray:779.1;stroke-dashoffset:779.1;}
+.thaw-orb{position:absolute;left:20px;top:20px;width:220px;height:220px;border-radius:50%;overflow:hidden;
+  background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.5),rgba(143,195,221,.26) 34%,rgba(47,106,143,.34) 68%,rgba(16,29,43,.6));
+  border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(6px);
+  box-shadow:inset 0 0 40px rgba(255,255,255,.18),inset 0 -20px 40px rgba(8,15,24,.4),0 0 60px rgba(143,195,221,.28);
+  transition:box-shadow .3s ease;}
+.thaw-orb::before{content:"";position:absolute;left:18%;top:10%;width:34%;height:20%;border-radius:50%;background:rgba(255,255,255,.55);filter:blur(10px);transform:rotate(-24deg);}
+.thaw-orb.shiver{animation:shiver .35s linear 2;}
+@keyframes shiver{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+#thaw-frost{position:absolute;inset:0;width:100%;height:100%;transition:opacity 1.2s ease;animation:frostGrow .9s ease-out;}
+@keyframes frostGrow{from{opacity:0;transform:scale(1.14)}to{opacity:1;transform:scale(1)}}
+.thaw.cracked #thaw-frost{opacity:.55;}
+.thaw.warm #thaw-frost{opacity:0;}
+.thaw-fog{position:absolute;inset:0;background:radial-gradient(circle at 50% 60%,rgba(255,255,255,.22),rgba(255,255,255,0) 70%);transition:opacity 1s ease;}
+.thaw.warm .thaw-fog{opacity:0;}
+.thaw-cracks{position:absolute;inset:0;width:100%;height:100%;}
+.thaw-cracks path{fill:none;stroke:#fff;stroke-width:1.6;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:crackDraw .45s ease-out forwards;filter:drop-shadow(0 0 4px rgba(255,255,255,.9));}
+@keyframes crackDraw{to{stroke-dashoffset:0}}
+.thaw-pulse{position:absolute;left:20px;top:20px;width:220px;height:220px;border-radius:50%;border:2px solid #ffd9a0;opacity:0;pointer-events:none;}
+.thaw.cracked .thaw-pulse{animation:pulseOut 1s ease-out forwards;}
+@keyframes pulseOut{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(2.6)}}
+.thaw-hint{position:absolute;left:0;right:0;top:calc(44% + 160px);text-align:center;font-size:13px;color:rgba(255,255,255,.72);padding:0 32px;transition:opacity .6s ease;min-height:20px;}
+.thaw.melt .thaw-hint{opacity:0;}
+.thaw-letter{position:absolute;left:50%;top:50%;width:min(88vw,400px);max-height:78vh;overflow:auto;transform:translate(-50%,-30%);opacity:0;pointer-events:none;
+  background:rgba(255,248,238,.16);border:1px solid rgba(255,255,255,.4);border-radius:22px;padding:28px 24px 22px;
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 30px 80px rgba(61,36,39,.45);
+  transition:opacity 1s ease,transform 1.2s cubic-bezier(.2,.8,.2,1);}
+.thaw.letter-in .thaw-letter{opacity:1;transform:translate(-50%,-50%);pointer-events:auto;}
+.thaw-letter .tl-kicker{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.75);margin-bottom:10px;}
+.thaw-letter h2{font-family:Georgia,serif;font-weight:500;font-size:1.35rem;margin-bottom:14px;color:#fff;}
+.thaw-letter .tl-msg{font-family:Georgia,serif;font-size:15px;line-height:1.8;color:#fff7ea;white-space:pre-wrap;}
+.thaw-letter .tl-foot{margin-top:20px;padding-top:14px;border-top:1px solid rgba(255,255,255,.25);font-size:12px;color:rgba(255,255,255,.8);}
+.thaw-letter .tl-btn{margin-top:16px;width:100%;border:none;border-radius:100px;padding:13px;font:inherit;font-size:14px;font-weight:600;background:#fff;color:#3d2427;cursor:pointer;}
+
+/* ── MEDIA ── */
+.media-add{display:flex;gap:8px;margin-bottom:10px;}
+.media-add button{flex:1;border:1.5px dashed var(--ring);background:var(--paper);border-radius:12px;padding:12px 8px;font:inherit;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer;}
+.media-add button:hover{border-color:var(--frost-deep);color:var(--frost-deep);}
+.media-add button:disabled{opacity:.45;cursor:not-allowed;}
+.rec-box{display:none;align-items:center;gap:12px;background:var(--ice1);border:1.5px solid var(--frost-deep);border-radius:12px;padding:12px 14px;margin-bottom:10px;}
+.rec-box.show{display:flex;}
+.rec-dot{width:10px;height:10px;border-radius:50%;background:#d64545;animation:recPulse 1s ease infinite;}
+@keyframes recPulse{50%{opacity:.25}}
+.rec-time{font-variant-numeric:tabular-nums;font-size:14px;font-weight:600;color:var(--ink);flex:1;}
+.rec-box button{border:none;border-radius:100px;padding:8px 16px;font:inherit;font-size:12px;font-weight:600;background:var(--ink);color:var(--ice);cursor:pointer;}
+.media-note{font-size:11px;color:var(--ink-soft);line-height:1.5;margin-bottom:6px;}
+.media-err{font-size:12px;color:#b03a3a;margin-bottom:8px;display:none;}
+.media-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;}
+.media-item{position:relative;border-radius:10px;overflow:hidden;background:var(--ice1);border:1px solid var(--ring);aspect-ratio:1;}
+.media-item img{width:100%;height:100%;object-fit:cover;display:block;}
+.media-item .x{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;border:none;background:rgba(16,29,43,.7);color:#fff;font-size:11px;cursor:pointer;}
+.media-audio{display:flex;align-items:center;gap:8px;background:var(--paper);border:1px solid var(--ring);border-radius:12px;padding:8px 10px;margin-bottom:8px;}
+.media-audio audio{flex:1;height:34px;min-width:0;}
+.media-audio .x{border:none;background:var(--ice1);color:var(--ink-soft);width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:11px;}
+.media-view{margin-bottom:14px;}
+.media-view .media-grid{grid-template-columns:repeat(2,1fr);}
+.media-view .media-item{aspect-ratio:auto;}
+.media-view .media-item img{height:auto;}
+.thaw-letter .tl-media{margin-top:16px;}
+.thaw-letter .tl-media .media-grid{grid-template-columns:repeat(2,1fr);}
+.thaw-letter .tl-media .media-item{aspect-ratio:auto;border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1);}
+.thaw-letter .tl-media .media-item img{height:auto;}
+.thaw-letter .tl-media .media-audio{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);}
 </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5J3WC9QD16"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5J3WC9QD16');
+</script>
 </head>
 <body>
 <div class="app">
@@ -410,6 +500,18 @@ h1{font-family:Georgia,serif;font-weight:500;font-size:1.75rem;letter-spacing:-0
       <label id="write-label">Your message</label>
       <textarea id="msg-input" placeholder="Dear future me…&#10;&#10;Start anywhere. This is yours." oninput="onMsgInput(this)" maxlength="2000"></textarea>
       <div class="char-count" id="char-count">0 / 2000</div>
+    </div>
+    <div class="field">
+      <label>Photos &amp; voice (optional)</label>
+      <div class="media-add">
+        <button type="button" id="add-photo-btn" onclick="document.getElementById('photo-input').click()">📷 Add photos</button>
+        <button type="button" id="rec-btn" onclick="startRecording()">🎙 Voice note</button>
+      </div>
+      <input type="file" id="photo-input" accept="image/*" multiple style="display:none" onchange="onPhotos(this)">
+      <div class="rec-box" id="rec-box"><div class="rec-dot"></div><div class="rec-time" id="rec-time">0:00</div><button type="button" onclick="stopRecording()">Stop</button></div>
+      <div class="media-err" id="media-err"></div>
+      <div id="draft-media"></div>
+      <div class="media-note">Up to 6 photos and 3 voice notes (2 min each). Saved on this device only for now, so keep this browser's data.</div>
     </div>
     <div class="field">
       <label>Title (optional)</label>
@@ -515,6 +617,7 @@ h1{font-family:Georgia,serif;font-weight:500;font-size:1.75rem;letter-spacing:-0
     <div class="review-block">
       <div class="review-block-label">Your message</div>
       <div class="review-msg" id="review-msg-text"></div>
+      <div class="media-note" id="review-media" style="margin-top:10px"></div>
     </div>
 
     <div class="review-meta">
@@ -581,14 +684,16 @@ h1{font-family:Georgia,serif;font-weight:500;font-size:1.75rem;letter-spacing:-0
       <div class="meta-pill"><div class="meta-val" id="detail-to">—</div><div class="meta-key">Recipient</div></div>
     </div>
     <div class="detail-locked-notice">
-      🔒 <span>This capsule is sealed. The message below will only display after you confirm you're ready to reveal it.</span>
+      🔒 <span id="detail-notice">This capsule is sealed.</span>
     </div>
 
     <!-- PROGRESS MAP -->
     <div class="progress-map" id="detail-progress-map"></div>
 
     <div class="detail-msg" id="detail-msg" style="display:none"></div>
-    <button class="btn btn-ghost" id="reveal-btn" onclick="revealMessage()" style="margin-bottom:10px">👁 I'm ready — show me the message</button>
+    <div class="media-view" id="detail-media"></div>
+    <button class="btn btn-primary" id="reveal-btn" onclick="openThaw(false)" style="margin-bottom:10px">❄ Hold to thaw</button>
+    <button class="btn btn-ghost" id="thaw-preview-btn" onclick="openThaw(true)" style="margin-bottom:10px;display:none">Preview the thaw</button>
     <button class="btn btn-ghost" onclick="go('s-mycapsules')">← Back to my capsules</button>
   </div>
 
@@ -638,6 +743,32 @@ h1{font-family:Georgia,serif;font-weight:500;font-size:1.75rem;letter-spacing:-0
     <div id="fb-list"></div>
     <button class="btn btn-ghost" onclick="go('s-home')" style="margin-top:8px;">← Back to home</button>
   </div>
+<!-- THAW OVERLAY -->
+<div class="thaw" id="thaw" role="dialog" aria-label="Open capsule">
+  <div class="thaw-bg"></div><div class="thaw-bg-warm"></div>
+  <canvas id="thaw-snow"></canvas>
+  <button class="thaw-close" onclick="closeThaw()" aria-label="Close">✕</button>
+  <div class="thaw-top" id="thaw-top">Sealed</div>
+  <div class="thaw-stage" id="thaw-stage" tabindex="0" role="button" aria-label="Press and hold to thaw">
+    <svg class="thaw-ring" viewBox="0 0 260 260"><circle class="track" cx="130" cy="130" r="124"/><circle class="fill" id="thaw-ring-fill" cx="130" cy="130" r="124"/></svg>
+    <div class="thaw-orb" id="thaw-orb">
+      <canvas id="thaw-frost" width="440" height="440"></canvas>
+      <div class="thaw-fog"></div>
+      <svg class="thaw-cracks" id="thaw-cracks" viewBox="0 0 220 220"></svg>
+    </div>
+    <div class="thaw-pulse"></div>
+  </div>
+  <div class="thaw-hint" id="thaw-hint"></div>
+  <div class="thaw-letter" id="thaw-letter">
+    <div class="tl-kicker" id="tl-kicker">Opened</div>
+    <h2 id="tl-title"></h2>
+    <div class="tl-msg" id="tl-msg"></div>
+    <div class="tl-media" id="tl-media"></div>
+    <div class="tl-foot" id="tl-foot"></div>
+    <button class="tl-btn" onclick="closeThaw()">Close</button>
+  </div>
+</div>
+
 <script>
 // ── STATE ──
 let draft = {};
@@ -667,10 +798,12 @@ function go(id){
 }
 
 function startCreate(){
-  draft={};
+  discardDraftMedia();
+  draft={media:[],draftKey:'d'+Date.now()};
   selectedDate=null;
   recipType='self';
   msgType='message';
+  renderDraftMedia();
   document.getElementById('msg-input').value='';
   document.getElementById('title-input').value='';
   document.getElementById('emoji-input').value='';
@@ -705,12 +838,16 @@ function onMsgInput(el){
   const cc = document.getElementById('char-count');
   cc.textContent = len+' / 2000';
   cc.className = 'char-count'+(len>1800?' near':'');
-  document.getElementById('write-next-btn').disabled = len < 1;
+  updateWriteBtn();
+}
+function updateWriteBtn(){
+  const has=document.getElementById('msg-input').value.trim().length>0 || (draft.media&&draft.media.length>0);
+  document.getElementById('write-next-btn').disabled=!has;
 }
 
 function writeNext(){
   const msg = document.getElementById('msg-input').value.trim();
-  if(!msg) return;
+  if(!msg && !(draft.media&&draft.media.length)) return;
   draft.message = msg;
   draft.title = document.getElementById('title-input').value.trim() || 'My capsule';
   draft.emoji = document.getElementById('emoji-input').value.trim() || (msgType==='prediction'?'🔮':msgType==='note'?'📝':'✉️');
@@ -848,7 +985,9 @@ function dateNext(){
 
 // ── REVIEW ──
 function populateReview(){
-  document.getElementById('review-msg-text').textContent = draft.message;
+  document.getElementById('review-msg-text').textContent = draft.message || '(No text. Photos and voice only.)';
+  const ph=(draft.media||[]).filter(m=>m.kind==='image').length, au=(draft.media||[]).filter(m=>m.kind==='audio').length;
+  document.getElementById('review-media').textContent=[ph?'📷 '+ph+' photo'+(ph>1?'s':''):'',au?'🎙 '+au+' voice note'+(au>1?'s':''):''].filter(Boolean).join(' · ');
   document.getElementById('review-date').textContent = draft.unlockLabel||'—';
   document.getElementById('review-days').textContent = draft.daysAway||'—';
   document.getElementById('review-to').textContent = draft.recipLabel||'You';
@@ -868,6 +1007,7 @@ function sealCapsule(){
         ...draft,
         sealedAt: new Date().toISOString(),
       };
+      draft.sealed=true;
       saveCapsule(capsule);
       renderStreak();
       document.getElementById('sealed-days').textContent = draft.daysAway;
@@ -914,7 +1054,7 @@ function renderCapsules(){
       <div class="ci-body">
         <div class="ci-date">${c.unlockLabel}</div>
         <div class="ci-title">${c.title||'My capsule'}</div>
-        <div class="ci-meta">🔒 Sealed · ${days} days away · To: ${c.recipLabel||'You'}</div>
+        <div class="ci-meta">${c.openedAt?'❄ Opened':'🔒 Sealed · '+days+' days away'} · To: ${c.recipLabel||'You'}</div>
       </div>
       <div class="ci-arrow">›</div>`;
     container.appendChild(div);
@@ -922,36 +1062,386 @@ function renderCapsules(){
 }
 
 // ── DETAIL ──
-let detailRevealed=false;
+let currentDetailId=null;
 function showDetail(id){
   const capsule=getCapsules().find(c=>c.id===id);
   if(!capsule) return;
-  detailRevealed=false;
+  currentDetailId=id;
   const days=daysUntil(new Date(capsule.unlockDate));
-  document.getElementById('detail-tag').textContent=(capsule.type||'message').toUpperCase()+' · SEALED';
+  const opened=!!capsule.openedAt;
+  document.getElementById('detail-tag').textContent=(capsule.type||'message').toUpperCase()+(opened?' · OPENED':' · SEALED');
   document.getElementById('detail-title').textContent=capsule.title||'My capsule';
   document.getElementById('detail-date').textContent=capsule.unlockLabel;
   document.getElementById('detail-days').textContent=days;
   document.getElementById('detail-to').textContent=capsule.recipLabel||'You';
   document.getElementById('detail-msg').textContent=capsule.message;
-  document.getElementById('detail-msg').style.display='none';
-  document.getElementById('reveal-btn').textContent='👁 I\'m ready — show me the message';
-  document.getElementById('reveal-btn').style.display='block';
+  document.getElementById('detail-msg').style.display=(opened&&capsule.message)?'block':'none';
+  releaseMedia('detail');
+  document.getElementById('detail-media').innerHTML='';
+  if(opened) renderMedia($m('detail-media'),capsule,'detail');
+  document.getElementById('detail-notice').textContent = opened
+    ? 'Opened. This promise was kept.'
+    : days>0 ? 'Sealed until '+capsule.unlockLabel+'. It opens only when the date arrives.'
+             : 'The date has arrived. Hold the orb to thaw it.';
+  document.getElementById('reveal-btn').textContent = opened ? '❄ Replay the thaw' : days>0 ? '❄ Try to open it' : '❄ Hold to thaw';
+  document.getElementById('thaw-preview-btn').style.display = (!opened && days>0) ? 'block' : 'none';
   go('s-detail');
   buildProgressMap(capsule);
 }
 
-function revealMessage(){
-  if(!detailRevealed){
-    detailRevealed=true;
-    document.getElementById('detail-msg').style.display='block';
-    document.getElementById('reveal-btn').textContent='🔒 Hide message';
-  } else {
-    detailRevealed=false;
-    document.getElementById('detail-msg').style.display='none';
-    document.getElementById('reveal-btn').textContent='👁 I\'m ready — show me the message';
+
+// ── MEDIA (IndexedDB) ──
+const MAX_PHOTOS=6, MAX_AUDIO=3, MAX_REC_S=120;
+const $m=id=>document.getElementById(id);
+let _db=null;
+function mediaDB(){
+  if(_db) return Promise.resolve(_db);
+  return new Promise((res,rej)=>{
+    if(!window.indexedDB) return rej(new Error('no-idb'));
+    const r=indexedDB.open('cyro_media',1);
+    r.onupgradeneeded=()=>r.result.createObjectStore('media');
+    r.onsuccess=()=>{_db=r.result;res(_db);};
+    r.onerror=()=>rej(r.error);
+  });
+}
+// Primary store is IndexedDB. If the browser blocks it (private mode, embedded previews),
+// fall back to localStorage as a data URL so photos and voice still save.
+function blobToDataURL(b){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(r.error);r.readAsDataURL(b);});}
+async function dataURLToBlob(u){return (await fetch(u)).blob();}
+async function putMedia(key,blob){
+  try{
+    const db=await mediaDB();
+    await new Promise((res,rej)=>{const t=db.transaction('media','readwrite');t.objectStore('media').put(blob,key);t.oncomplete=()=>res();t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error);});
+    return;
+  }catch(e){}
+  const url=await blobToDataURL(blob);
+  try{ localStorage.setItem('cyro_m_'+key,url); }
+  catch(e){ throw new Error('storage-full'); }
+}
+async function getMedia(key){
+  try{
+    const db=await mediaDB();
+    const b=await new Promise((res,rej)=>{const q=db.transaction('media').objectStore('media').get(key);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error);});
+    if(b) return b;
+  }catch(e){}
+  try{ const u=localStorage.getItem('cyro_m_'+key); if(u) return await dataURLToBlob(u); }catch(e){}
+  return null;
+}
+async function delMedia(key){
+  try{const db=await mediaDB();db.transaction('media','readwrite').objectStore('media').delete(key);}catch(e){}
+  try{localStorage.removeItem('cyro_m_'+key);}catch(e){}
+}
+function mediaError(msg){
+  const el=$m('media-err'); el.textContent=msg||''; el.style.display=msg?'block':'none';
+}
+
+// draft media
+const draftUrls={};
+function discardDraftMedia(){
+  if(draft && draft.media && !draft.sealed) draft.media.forEach(m=>delMedia(m.key));
+  Object.values(draftUrls).forEach(u=>URL.revokeObjectURL(u));
+  for(const k in draftUrls) delete draftUrls[k];
+}
+function decodeToJpeg(src){
+  return new Promise((res,rej)=>{
+    const url=src instanceof Blob?URL.createObjectURL(src):src, img=new Image();
+    img.onload=()=>{
+      const max=1600, sc=Math.min(1,max/Math.max(img.width,img.height));
+      const c=document.createElement('canvas'); c.width=Math.round(img.width*sc); c.height=Math.round(img.height*sc);
+      const x=c.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,c.width,c.height); x.drawImage(img,0,0,c.width,c.height);
+      if(src instanceof Blob) URL.revokeObjectURL(url);
+      c.toBlob(bl=>bl?res(bl):rej(new Error('resize')),'image/jpeg',0.82);
+    };
+    img.onerror=()=>{ if(src instanceof Blob) URL.revokeObjectURL(url); rej(new Error('load')); };
+    img.src=url;
+  });
+}
+let _heicLoad=null;
+function loadHeic(){
+  if(window.heic2any) return Promise.resolve();
+  if(!_heicLoad) _heicLoad=new Promise((res,rej)=>{
+    const sc=document.createElement('script');
+    sc.src='https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js';
+    sc.onload=()=>res(); sc.onerror=()=>{_heicLoad=null;rej(new Error('heic-load'));};
+    document.head.appendChild(sc);
+  });
+  return _heicLoad;
+}
+async function resizeImage(file){
+  try{ return await decodeToJpeg(file); }
+  catch(e){
+    if(e.message!=='load') throw e;
+    const isHeic=/hei[cf]/i.test(file.type)||/\.hei[cf]$/i.test(file.name);
+    if(!isHeic) throw e;
+    try{
+      await loadHeic();
+      const out=await window.heic2any({blob:file,toType:'image/jpeg',quality:0.85});
+      return await decodeToJpeg(Array.isArray(out)?out[0]:out);
+    }catch(e2){ throw new Error(e2.message==='heic-load'?'heic-load':'load'); }
   }
 }
+async function onPhotos(input){
+  mediaError('');
+  const files=Array.from(input.files||[]); input.value='';
+  for(const f of files){
+    if((draft.media||[]).filter(m=>m.kind==='image').length>=MAX_PHOTOS){mediaError('Up to '+MAX_PHOTOS+' photos per capsule.');break;}
+    try{
+      const blob=await resizeImage(f), key=draft.draftKey+'-'+Date.now()+'-'+Math.random().toString(36).slice(2,6);
+      await putMedia(key,blob);
+      draft.media.push({key,kind:'image'});
+    }catch(e){
+      mediaError(e.message==='storage-full' ? 'Not enough storage in this browser for that photo. Try a smaller one or remove others.'
+        : e.message==='heic-load' ? 'Couldn\'t convert that HEIC photo (needs internet). Try a JPG or PNG.'
+        : e.message==='load' ? 'That image format isn\'t supported here. Try a JPG, PNG, WebP or HEIC.'
+        : 'Could not add that photo ('+(e.message||e.name||'unknown')+').');
+    }
+  }
+  renderDraftMedia();
+}
+
+// recording
+let rec={mr:null,chunks:[],stream:null,t0:0,timer:0};
+async function startRecording(){
+  mediaError('');
+  if((draft.media||[]).filter(m=>m.kind==='audio').length>=MAX_AUDIO){mediaError('Up to '+MAX_AUDIO+' voice notes per capsule.');return;}
+  if(!navigator.mediaDevices||!window.MediaRecorder){mediaError('Voice recording isn\'t supported in this browser.');return;}
+  try{
+    rec.stream=await navigator.mediaDevices.getUserMedia({audio:true});
+  }catch(e){ mediaError('Microphone blocked. Allow it in your browser settings to record.'); return; }
+  const type=['audio/webm;codecs=opus','audio/mp4','audio/webm'].find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t))||'';
+  rec.chunks=[]; rec.mr=type?new MediaRecorder(rec.stream,{mimeType:type}):new MediaRecorder(rec.stream);
+  rec.mr.ondataavailable=e=>{if(e.data&&e.data.size)rec.chunks.push(e.data);};
+  rec.mr.onstop=async()=>{
+    clearInterval(rec.timer);
+    rec.stream.getTracks().forEach(t=>t.stop());
+    $m('rec-box').classList.remove('show'); $m('rec-btn').disabled=false;
+    const blob=new Blob(rec.chunks,{type:rec.mr.mimeType||'audio/webm'});
+    if(blob.size<500) return;
+    const dur=Math.round((Date.now()-rec.t0)/1000), key=draft.draftKey+'-a'+Date.now();
+    try{ await putMedia(key,blob); draft.media.push({key,kind:'audio',dur}); }
+    catch(e){ mediaError(e.message==='storage-full' ? 'Not enough storage in this browser for that voice note. Try a shorter one.' : 'Could not save the voice note ('+(e.message||e.name||'unknown')+').'); }
+    renderDraftMedia();
+  };
+  rec.t0=Date.now(); rec.mr.start();
+  $m('rec-btn').disabled=true; $m('rec-box').classList.add('show'); $m('rec-time').textContent='0:00';
+  rec.timer=setInterval(()=>{
+    const s=Math.floor((Date.now()-rec.t0)/1000);
+    $m('rec-time').textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+    if(s>=MAX_REC_S) stopRecording();
+  },250);
+}
+function stopRecording(){ if(rec.mr&&rec.mr.state!=='inactive') rec.mr.stop(); }
+
+async function renderDraftMedia(){
+  const box=$m('draft-media'); if(!box) return;
+  const items=(draft&&draft.media)||[];
+  box.innerHTML='';
+  const grid=document.createElement('div'); grid.className='media-grid';
+  for(const m of items){
+    let url=draftUrls[m.key];
+    if(!url){ try{ const b=await getMedia(m.key); if(!b) continue; url=draftUrls[m.key]=URL.createObjectURL(b);}catch(e){continue;} }
+    if(m.kind==='image'){
+      const d=document.createElement('div'); d.className='media-item';
+      d.innerHTML='<img alt=""><button class="x" type="button" aria-label="Remove">✕</button>';
+      d.querySelector('img').src=url; d.querySelector('.x').onclick=()=>removeDraftMedia(m.key);
+      grid.appendChild(d);
+    }
+  }
+  if(grid.children.length) box.appendChild(grid);
+  for(const m of items){
+    if(m.kind!=='audio'||!draftUrls[m.key]) continue;
+    const d=document.createElement('div'); d.className='media-audio';
+    d.innerHTML='<span>🎙</span><audio controls preload="metadata"></audio><button class="x" type="button" aria-label="Remove">✕</button>';
+    d.querySelector('audio').src=draftUrls[m.key]; d.querySelector('.x').onclick=()=>removeDraftMedia(m.key);
+    box.appendChild(d);
+  }
+  const ph=items.filter(m=>m.kind==='image').length, au=items.filter(m=>m.kind==='audio').length;
+  $m('add-photo-btn').disabled=ph>=MAX_PHOTOS;
+  if(!rec.mr||rec.mr.state==='inactive') $m('rec-btn').disabled=au>=MAX_AUDIO;
+  updateWriteBtn();
+}
+function removeDraftMedia(key){
+  draft.media=draft.media.filter(m=>m.key!==key);
+  delMedia(key);
+  if(draftUrls[key]){URL.revokeObjectURL(draftUrls[key]);delete draftUrls[key];}
+  renderDraftMedia();
+}
+
+// viewing sealed media
+const viewUrls={detail:[],thaw:[]};
+function releaseMedia(scope){ viewUrls[scope].forEach(u=>URL.revokeObjectURL(u)); viewUrls[scope]=[]; }
+async function renderMedia(container,capsule,scope){
+  const items=capsule.media||[]; if(!items.length) return;
+  const grid=document.createElement('div'); grid.className='media-grid';
+  const audios=[];
+  for(const m of items){
+    let b=null; try{ b=await getMedia(m.key); }catch(e){}
+    if(!b){ continue; }
+    const url=URL.createObjectURL(b); viewUrls[scope].push(url);
+    if(m.kind==='image'){
+      const d=document.createElement('div'); d.className='media-item'; d.innerHTML='<img alt="">'; d.querySelector('img').src=url; grid.appendChild(d);
+    } else {
+      const d=document.createElement('div'); d.className='media-audio';
+      d.innerHTML='<span>🎙</span><audio controls preload="metadata"></audio>'; d.querySelector('audio').src=url; audios.push(d);
+    }
+  }
+  if(grid.children.length) container.appendChild(grid);
+  audios.forEach(a=>container.appendChild(a));
+  if(!container.children.length){ const n=document.createElement('div'); n.className='media-note'; n.textContent='Attachments aren\'t on this device.'; container.appendChild(n); }
+}
+
+// ── THAW ──
+const THAW={raf:0,last:0,progress:0,holding:false,done:false,locked:false,preview:false,capsule:null,days:0,flakes:[],timers:[],shivered:false};
+const HOLD_MS=1600, LOCK_CAP=0.3, RING=779.1;
+const $t=id=>document.getElementById(id);
+
+function openThaw(preview){
+  const capsule=getCapsules().find(c=>c.id===currentDetailId);
+  if(!capsule) return;
+  const days=daysUntil(new Date(capsule.unlockDate));
+  Object.assign(THAW,{progress:0,holding:false,done:false,preview:!!preview,capsule,days,shivered:false,last:0});
+  THAW.locked = days>0 && !preview && !capsule.openedAt;
+  const el=$t('thaw');
+  el.classList.remove('warm','melt','cracked','letter-in');
+  $t('thaw-cracks').innerHTML='';
+  $t('thaw-ring-fill').style.strokeDashoffset=RING;
+  $t('thaw-top').textContent = preview ? 'Preview' : (capsule.title||'Sealed');
+  $t('thaw-hint').textContent = THAW.locked ? 'Frozen for '+days+' more day'+(days===1?'':'s') : 'Press and hold to thaw';
+  $t('tl-title').textContent=capsule.title||'My capsule';
+  $t('tl-msg').textContent=capsule.message||'';
+  releaseMedia('thaw'); $t('tl-media').innerHTML='';
+  renderMedia($t('tl-media'),capsule,'thaw');
+  const held=Math.max(0,Math.floor((Date.now()-new Date(capsule.sealedAt||Date.now()))/86400000));
+  $t('tl-foot').textContent = preview ? 'preview · this is how it will open' : 'opened · held '+held+' day'+(held===1?'':'s')+' … promise kept.';
+  $t('tl-kicker').textContent = preview ? 'Preview' : 'Opened';
+  growFrost(); initSnow();
+  el.classList.add('show');
+  cancelAnimationFrame(THAW.raf);
+  THAW.raf=requestAnimationFrame(thawTick);
+}
+
+function closeThaw(){
+  THAW.timers.forEach(clearTimeout); THAW.timers=[];
+  cancelAnimationFrame(THAW.raf);
+  $t('thaw').classList.remove('show');
+  releaseMedia('thaw');
+  if(currentDetailId) showDetail(currentDetailId);
+}
+
+function growFrost(){
+  const cv=$t('thaw-frost'), c=cv.getContext('2d'), W=cv.width, R=W/2;
+  c.clearRect(0,0,W,W);
+  c.lineCap='round'; c.shadowColor='rgba(200,235,250,.9)'; c.shadowBlur=6;
+  function branch(x,y,a,len,depth,w){
+    const x2=x+Math.cos(a)*len, y2=y+Math.sin(a)*len;
+    c.strokeStyle='rgba(215,240,252,'+(0.35+depth*0.1)+')'; c.lineWidth=w;
+    c.beginPath(); c.moveTo(x,y); c.lineTo(x2,y2); c.stroke();
+    if(depth>0){
+      const n=2+(Math.random()<.4?1:0);
+      for(let i=0;i<n;i++){
+        const side=i%2?1:-1, t=0.45+Math.random()*0.45;
+        const bx=x+(x2-x)*t, by=y+(y2-y)*t;
+        branch(bx,by,a+side*(0.5+Math.random()*0.5),len*(0.5+Math.random()*0.15),depth-1,w*0.7);
+      }
+      branch(x2,y2,a+(Math.random()-.5)*0.3,len*0.55,depth-1,w*0.75);
+    }
+  }
+  const N=30;
+  for(let i=0;i<N;i++){
+    const ang=(i/N)*Math.PI*2+(Math.random()-.5)*0.18;
+    const x=R+Math.cos(ang)*R, y=R+Math.sin(ang)*R;
+    branch(x,y,ang+Math.PI+(Math.random()-.5)*0.4,38+Math.random()*52,3,2.2);
+  }
+  // rim haze
+  const g=c.createRadialGradient(R,R,R*0.62,R,R,R);
+  g.addColorStop(0,'rgba(220,242,252,0)'); g.addColorStop(1,'rgba(220,242,252,.38)');
+  c.shadowBlur=0; c.fillStyle=g; c.beginPath(); c.arc(R,R,R,0,Math.PI*2); c.fill();
+  // restart grow animation
+  cv.style.animation='none'; void cv.offsetWidth; cv.style.animation='';
+}
+
+function initSnow(){
+  const cv=$t('thaw-snow');
+  cv.width=window.innerWidth; cv.height=window.innerHeight;
+  THAW.flakes=Array.from({length:90},()=>({
+    x:Math.random()*cv.width,y:Math.random()*cv.height,
+    r:0.6+Math.random()*1.8,vy:12+Math.random()*28,vx:(Math.random()-.5)*10,ph:Math.random()*6.28
+  }));
+}
+
+function thawTick(ts){
+  if(!$t('thaw').classList.contains('show')) return;
+  const dt=THAW.last?Math.min(0.05,(ts-THAW.last)/1000):0.016; THAW.last=ts;
+  // snow
+  const cv=$t('thaw-snow'), c=cv.getContext('2d');
+  c.clearRect(0,0,cv.width,cv.height); c.fillStyle='rgba(255,255,255,.75)';
+  for(const f of THAW.flakes){
+    f.y+=f.vy*dt; f.x+=(f.vx+Math.sin(ts/1200+f.ph)*8)*dt;
+    if(f.y>cv.height+4){f.y=-4;f.x=Math.random()*cv.width;}
+    c.globalAlpha=0.35+f.r/3; c.beginPath(); c.arc(f.x,f.y,f.r,0,6.283); c.fill();
+  }
+  c.globalAlpha=1;
+  // hold progress
+  if(!THAW.done){
+    const cap=THAW.locked?LOCK_CAP:1;
+    if(THAW.holding){
+      THAW.progress=Math.min(cap,THAW.progress+dt*1000/HOLD_MS);
+      if(THAW.locked && THAW.progress>=cap && !THAW.shivered){
+        THAW.shivered=true;
+        const o=$t('thaw-orb'); o.classList.remove('shiver'); void o.offsetWidth; o.classList.add('shiver');
+        $t('thaw-hint').textContent='Still frozen. It opens '+THAW.capsule.unlockLabel+'.';
+      }
+    } else {
+      THAW.progress=Math.max(0,THAW.progress-dt*1000/450);
+      if(THAW.progress<0.02) THAW.shivered=false;
+    }
+    const p=THAW.progress;
+    $t('thaw-ring-fill').style.strokeDashoffset=RING*(1-p);
+    $t('thaw-orb').style.boxShadow='inset 0 0 40px rgba(255,255,255,'+(0.18+p*0.3)+'),inset 0 -20px 40px rgba(8,15,24,.4),0 0 '+(60+p*70)+'px rgba(143,195,221,'+(0.28+p*0.4)+')';
+    if(p>=1) crackOpen();
+  }
+  THAW.raf=requestAnimationFrame(thawTick);
+}
+
+function crackOpen(){
+  THAW.done=true;
+  const el=$t('thaw');
+  el.classList.add('cracked');
+  let svg='';
+  for(let i=0;i<8;i++){
+    let a=(i/8)*6.283+(Math.random()-.5)*0.5, x=110, y=110, d='M110 110';
+    for(let k=0;k<4;k++){
+      a+=(Math.random()-.5)*0.7; const l=18+Math.random()*16;
+      x+=Math.cos(a)*l; y+=Math.sin(a)*l; d+=' L'+x.toFixed(1)+' '+y.toFixed(1);
+    }
+    svg+='<path d="'+d+'" pathLength="1" style="animation-delay:'+(i*0.03)+'s"/>';
+  }
+  $t('thaw-cracks').innerHTML=svg;
+  try{ if(navigator.vibrate) navigator.vibrate(40); }catch(e){}
+  THAW.timers.push(setTimeout(()=>{
+    el.classList.add('warm','melt');
+    $t('thaw-hint').textContent='';
+    if(!THAW.preview && THAW.capsule && !THAW.capsule.openedAt){
+      const list=getCapsules(), c=list.find(x=>x.id===THAW.capsule.id);
+      if(c){ c.openedAt=new Date().toISOString(); localStorage.setItem('cyro_capsules',JSON.stringify(list)); THAW.capsule=c; }
+    }
+    THAW.timers.push(setTimeout(()=>el.classList.add('letter-in'),900));
+  },800));
+}
+
+// hold controls
+(function(){
+  const stage=$t('thaw-stage');
+  const down=e=>{ if(THAW.done) return; e.preventDefault(); THAW.holding=true; $t('thaw-hint').textContent = THAW.locked ? $t('thaw-hint').textContent : 'Keep holding…'; };
+  const up=()=>{ THAW.holding=false; if(!THAW.done && !THAW.locked) $t('thaw-hint').textContent='Press and hold to thaw'; };
+  stage.addEventListener('pointerdown',down);
+  window.addEventListener('pointerup',up);
+  window.addEventListener('pointercancel',up);
+  stage.addEventListener('keydown',e=>{ if(e.key===' '||e.key==='Enter'){ if(!e.repeat) down(e); } });
+  stage.addEventListener('keyup',e=>{ if(e.key===' '||e.key==='Enter') up(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $t('thaw').classList.contains('show')) closeThaw(); });
+  stage.addEventListener('contextmenu',e=>e.preventDefault());
+})();
 
 // ── FEEDBACK ──
 function getFeedback(){
