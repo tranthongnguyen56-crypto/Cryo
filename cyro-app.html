@@ -393,6 +393,10 @@ h1{font-family:Georgia,serif;font-weight:500;font-size:1.75rem;letter-spacing:-0
 .thaw-letter h2{font-family:Georgia,serif;font-weight:500;font-size:1.35rem;margin-bottom:14px;color:#fff;}
 .thaw-letter .tl-msg{font-family:Georgia,serif;font-size:15px;line-height:1.8;color:#fff7ea;white-space:pre-wrap;}
 .thaw-letter .tl-foot{margin-top:20px;padding-top:14px;border-top:1px solid rgba(255,255,255,.25);font-size:12px;color:rgba(255,255,255,.8);}
+.thaw-letter .tl-line{margin-top:14px;width:100%;box-sizing:border-box;border-radius:12px;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);color:#fff;font:inherit;font-size:13px;padding:11px 12px;outline:none;}
+.thaw-letter .tl-line::placeholder{color:rgba(255,255,255,.65);}
+.thaw-letter .tl-btn.tl-share{margin-top:10px;background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.45);}
+.thaw-letter .tl-share-st{margin-top:8px;font-size:12px;color:rgba(255,255,255,.85);text-align:center;min-height:14px;}
 .thaw-letter .tl-btn{margin-top:16px;width:100%;border:none;border-radius:100px;padding:13px;font:inherit;font-size:14px;font-weight:600;background:#fff;color:#3d2427;cursor:pointer;}
 
 /* ── MEDIA ── */
@@ -424,6 +428,77 @@ h1{font-family:Georgia,serif;font-weight:500;font-size:1.75rem;letter-spacing:-0
 .thaw-letter .tl-media .media-item{aspect-ratio:auto;border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1);}
 .thaw-letter .tl-media .media-item img{height:auto;}
 .thaw-letter .tl-media .media-audio{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);}
+/* ── CY GUIDE ── */
+.guide-card{display:flex;align-items:center;gap:12px;border:1.5px dashed var(--frost);background:var(--paper);border-radius:14px;padding:12px 14px;margin-bottom:16px;}
+.g-orb{width:36px;height:36px;border-radius:50%;flex:0 0 36px;background:radial-gradient(circle at 32% 28%,#fff,#A9DAF0 38%,#2F6A8F 100%);box-shadow:0 0 14px rgba(143,195,221,.7);}
+.guide-card .gc-t{font-size:13px;font-weight:600;color:var(--ink);}
+.guide-card .gc-s{font-size:11px;color:var(--ink-soft);margin-top:2px;line-height:1.4;}
+.guide-card button{margin-left:auto;flex:0 0 auto;border:none;border-radius:100px;padding:9px 16px;font:inherit;font-size:12px;font-weight:600;background:var(--frost-deep);color:#fff;cursor:pointer;}
+.guide-note{display:none;font-size:12px;color:var(--frost-deep);background:var(--ice1);border-radius:10px;padding:8px 12px;margin-bottom:12px;}
+.guide{position:fixed;inset:0;z-index:150;background:var(--ice);display:none;flex-direction:column;}
+.guide.show{display:flex;animation:fadeIn .25s ease;}
+.g-wrap{width:100%;max-width:520px;margin:0 auto;padding:0 20px;}
+.g-head{border-bottom:1px solid var(--ring);background:var(--paper);padding-top:env(safe-area-inset-top,0px);}
+.g-head .g-wrap{display:flex;align-items:center;gap:10px;height:56px;}
+.g-head .g-name{font-size:14px;font-weight:700;}
+.g-head .g-mode{font-size:11px;color:var(--ink-soft);}
+.g-x{margin-left:auto;border:none;background:var(--ice1);color:var(--ink-soft);width:34px;height:34px;border-radius:50%;font-size:14px;cursor:pointer;}
+.g-log{flex:1;overflow-y:auto;padding:16px 0;}
+.g-log .g-wrap{display:flex;flex-direction:column;gap:10px;}
+.g-b{align-self:flex-start;max-width:88%;background:var(--paper);border:1px solid var(--ring);border-radius:16px 16px 16px 4px;padding:10px 14px;font-size:14px;line-height:1.5;color:var(--ink);white-space:pre-wrap;}
+.g-b.small{font-size:12px;color:var(--ink-soft);}
+.g-u{align-self:flex-end;max-width:88%;background:var(--frost-deep);color:#fff;border-radius:16px 16px 4px 16px;padding:10px 14px;font-size:14px;line-height:1.5;white-space:pre-wrap;}
+.g-b.think{color:var(--ink-soft);font-style:italic;}
+.g-chips{display:flex;flex-wrap:wrap;gap:8px;padding-top:4px;}
+.g-chip{border:1.5px solid var(--ring);background:var(--paper);border-radius:100px;padding:9px 14px;font:inherit;font-size:13px;font-weight:600;color:var(--frost-deep);cursor:pointer;}
+.g-chip:hover{border-color:var(--frost-deep);}
+.g-chip.soft{color:var(--ink-soft);font-weight:500;}
+.g-in{border-top:1px solid var(--ring);background:var(--paper);padding:12px 0 calc(12px + env(safe-area-inset-bottom,0px));}
+.g-in.off{display:none;}
+.g-in .g-wrap{display:flex;gap:8px;align-items:flex-end;}
+.g-in textarea{flex:1;min-width:0;border:1.5px solid var(--ring);border-radius:14px;padding:10px 12px;font:inherit;font-size:14px;color:var(--ink);background:var(--ice);resize:none;max-height:120px;outline:none;}
+.g-in textarea:focus{border-color:var(--frost-deep);}
+.g-in button{border:none;border-radius:100px;padding:11px 18px;font:inherit;font-size:13px;font-weight:600;background:var(--frost-deep);color:#fff;cursor:pointer;}
+.g-res{background:var(--paper);border:1.5px solid var(--frost);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;}
+.g-res h3{font-family:Georgia,serif;font-weight:500;font-size:1.05rem;}
+.g-res textarea,.g-res input{width:100%;border:1.5px solid var(--ring);border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;line-height:1.6;color:var(--ink);background:var(--ice);outline:none;}
+.g-res textarea{min-height:200px;resize:vertical;font-family:Georgia,serif;}
+.g-res label{font-size:11px;font-weight:600;color:var(--ink-soft);}
+.g-ideas{display:flex;flex-direction:column;gap:6px;}
+.g-idea{font-size:12px;color:var(--ink);background:var(--ice1);border-radius:10px;padding:8px 10px;line-height:1.4;}
+.g-idea b{color:var(--frost-deep);margin-right:4px;}
+.g-btns{display:flex;flex-direction:column;gap:8px;}
+.g-btns button{border:none;border-radius:100px;padding:13px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;background:var(--frost-deep);color:#fff;}
+.g-btns button.ghost{background:var(--paper);color:var(--ink-soft);border:1.5px solid var(--ring);}
+
+/* — interactive layer — */
+.guide{--g-glow:#8FC3DD;}
+.g-hero{position:sticky;top:0;z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 0 14px;background:linear-gradient(var(--ice) 70%,rgba(244,248,251,0));}
+.g-big{position:relative;width:68px;height:68px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fff,#A9DAF0 36%,#2F6A8F 100%);box-shadow:0 0 22px var(--g-glow);transition:box-shadow .4s ease,transform .3s ease;}
+.g-big::after{content:"";position:absolute;inset:-8px;border-radius:50%;border:2px solid var(--g-glow);opacity:0;}
+.g-big.think{animation:gThink 1.1s ease-in-out infinite;}
+.g-big.think::after{animation:gRing 1.1s ease-out infinite;}
+.g-big.heard{animation:gHeard .6s ease;}
+.g-big.listen::after{animation:gRing 1.4s ease-out infinite;}
+@keyframes gThink{50%{transform:scale(1.08)}}
+@keyframes gRing{0%{opacity:.8;transform:scale(.9)}100%{opacity:0;transform:scale(1.5)}}
+@keyframes gHeard{0%{transform:scale(1)}35%{transform:scale(1.18);box-shadow:0 0 44px var(--g-glow)}100%{transform:scale(1)}}
+.g-prog{display:flex;gap:8px;}
+.g-prog i{width:10px;height:10px;border-radius:50%;background:var(--ring);transition:background .3s,box-shadow .3s,transform .3s;}
+.g-prog i.now{background:var(--frost);transform:scale(1.2);}
+.g-prog i.on{background:var(--frost-deep);box-shadow:0 0 8px var(--g-glow);}
+.g-b,.g-u{animation:gPop .28s ease;}
+@keyframes gPop{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
+.g-dots{display:inline-flex;gap:4px;align-items:center;height:14px;}
+.g-dots i{width:6px;height:6px;border-radius:50%;background:var(--ink-soft);opacity:.35;animation:gDot 1s infinite;}
+.g-dots i:nth-child(2){animation-delay:.15s}.g-dots i:nth-child(3){animation-delay:.3s}
+@keyframes gDot{0%,60%,100%{opacity:.25;transform:none}30%{opacity:1;transform:translateY(-3px)}}
+.g-b.typing{padding:12px 16px;}
+.g-b.react{background:var(--ice1);border-color:transparent;color:var(--frost-deep);font-weight:600;}
+.g-chip.start{font-weight:500;color:var(--ink);}
+.g-in .g-mic{flex:0 0 auto;border:1.5px solid var(--ring);background:var(--paper);color:var(--ink-soft);width:42px;height:42px;padding:0;border-radius:50%;font-size:16px;cursor:pointer;}
+.g-in .g-mic.on{background:#fdecec;border-color:#e74c3c;color:#e74c3c;animation:gThink 1s ease-in-out infinite;}
+.g-skiphint{font-size:11px;color:var(--ink-soft);}
 </style>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-5J3WC9QD16"></script>
@@ -482,7 +557,8 @@ h1{font-family:Georgia,serif;font-weight:500;font-size:1.75rem;letter-spacing:-0
     </div>
 
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="startCreate()">🔒 Seal a new capsule</button>
+      <button class="btn btn-primary" onclick="startCreate(); openGuide()">✨ Let Cy guide you</button>
+      <button class="btn btn-ghost" onclick="startCreate()" style="margin-top:8px">🔒 Seal a new capsule</button>
       <button class="btn btn-ghost" onclick="go('s-mycapsules')">📦 My capsules</button>
     </div>
   </div>
@@ -496,6 +572,12 @@ h1{font-family:Georgia,serif;font-weight:500;font-size:1.75rem;letter-spacing:-0
       <div class="type-tab" onclick="switchType(this,'prediction')">🔮 Prediction</div>
       <div class="type-tab" onclick="switchType(this,'note')">📝 Note</div>
     </div>
+    <div class="guide-card">
+      <div class="g-orb"></div>
+      <div><div class="gc-t">Not sure what to say?</div><div class="gc-s">Cy asks a few questions and helps you shape it.</div></div>
+      <button type="button" onclick="openGuide()">Guide me</button>
+    </div>
+    <div class="guide-note" id="guide-note"></div>
     <div class="field">
       <label id="write-label">Your message</label>
       <textarea id="msg-input" placeholder="Dear future me…&#10;&#10;Start anywhere. This is yours." oninput="onMsgInput(this)" maxlength="2000"></textarea>
@@ -692,8 +774,7 @@ h1{font-family:Georgia,serif;font-weight:500;font-size:1.75rem;letter-spacing:-0
 
     <div class="detail-msg" id="detail-msg" style="display:none"></div>
     <div class="media-view" id="detail-media"></div>
-    <button class="btn btn-primary" id="reveal-btn" onclick="openThaw(false)" style="margin-bottom:10px">❄ Hold to thaw</button>
-    <button class="btn btn-ghost" id="thaw-preview-btn" onclick="openThaw(true)" style="margin-bottom:10px;display:none">Preview the thaw</button>
+    <button class="btn btn-primary" id="reveal-btn" onclick="openThaw()" style="margin-bottom:10px">❄ Hold to thaw</button>
     <button class="btn btn-ghost" onclick="go('s-mycapsules')">← Back to my capsules</button>
   </div>
 
@@ -743,6 +824,13 @@ h1{font-family:Georgia,serif;font-weight:500;font-size:1.75rem;letter-spacing:-0
     <div id="fb-list"></div>
     <button class="btn btn-ghost" onclick="go('s-home')" style="margin-top:8px;">← Back to home</button>
   </div>
+<!-- CY GUIDE -->
+<div class="guide" id="guide" role="dialog" aria-label="Cy guide">
+  <div class="g-head"><div class="g-wrap"><div><div class="g-name">Cy</div><div class="g-mode" id="g-mode"></div></div><div class="g-prog" id="g-prog" aria-hidden="true" style="margin-left:14px"><i></i><i></i><i></i></div><button type="button" class="g-x" onclick="closeGuide()" aria-label="Close">✕</button></div></div>
+  <div class="g-log" id="g-log"><div class="g-hero"><div class="g-big" id="g-big"></div></div><div class="g-wrap" id="g-feed"></div></div>
+  <div class="g-in off" id="g-in"><div class="g-wrap"><button type="button" class="g-mic" id="g-mic" aria-label="Speak your answer" hidden>🎙</button><textarea id="g-text" rows="1" maxlength="400" placeholder="Type your answer…"></textarea><button type="button" id="g-send">Send</button></div></div>
+</div>
+
 <!-- THAW OVERLAY -->
 <div class="thaw" id="thaw" role="dialog" aria-label="Open capsule">
   <div class="thaw-bg"></div><div class="thaw-bg-warm"></div>
@@ -765,6 +853,9 @@ h1{font-family:Georgia,serif;font-weight:500;font-size:1.75rem;letter-spacing:-0
     <div class="tl-msg" id="tl-msg"></div>
     <div class="tl-media" id="tl-media"></div>
     <div class="tl-foot" id="tl-foot"></div>
+    <input class="tl-line" id="tl-share-line" maxlength="90" placeholder="Add a line to the clip (optional)" aria-label="Line to show in the shared clip">
+    <button class="tl-btn tl-share" id="tl-share" onclick="shareThaw()">Share this moment</button>
+    <div class="tl-share-st" id="tl-share-st" aria-live="polite"></div>
     <button class="tl-btn" onclick="closeThaw()">Close</button>
   </div>
 </div>
@@ -804,6 +895,7 @@ function startCreate(){
   recipType='self';
   msgType='message';
   renderDraftMedia();
+  var gn=document.getElementById('guide-note'); if(gn) gn.style.display='none';
   document.getElementById('msg-input').value='';
   document.getElementById('title-input').value='';
   document.getElementById('emoji-input').value='';
@@ -994,7 +1086,9 @@ function populateReview(){
 }
 
 // ── SEAL ──
+let _sealing=false;
 function sealCapsule(){
+  if(_sealing) return; _sealing=true;
   go('s-sealing');
   const fill = document.getElementById('seal-fill');
   let pct=0;
@@ -1007,8 +1101,9 @@ function sealCapsule(){
         ...draft,
         sealedAt: new Date().toISOString(),
       };
-      draft.sealed=true;
-      saveCapsule(capsule);
+      try{ saveCapsule(capsule); }
+      catch(e){ _sealing=false; go('s-review'); showAlert('⚠️','Not sealed: storage is full','Free up space or remove a photo or voice note, then seal again.'); return; }
+      draft.sealed=true; _sealing=false;
       renderStreak();
       document.getElementById('sealed-days').textContent = draft.daysAway;
       setTimeout(()=>go('s-sealed'),400);
@@ -1017,6 +1112,7 @@ function sealCapsule(){
 }
 
 // ── LOCALSTORAGE ──
+const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function getCapsules(){
   try{ return JSON.parse(localStorage.getItem('cyro_capsules')||'[]'); }
   catch{ return []; }
@@ -1050,11 +1146,11 @@ function renderCapsules(){
     div.className='capsule-item'+(urgent?' urgent':'');
     div.onclick=()=>showDetail(c.id);
     div.innerHTML=`
-      <div class="ci-icon">${c.emoji||'✉️'}</div>
+      <div class="ci-icon">${esc(c.emoji||'✉️')}</div>
       <div class="ci-body">
-        <div class="ci-date">${c.unlockLabel}</div>
-        <div class="ci-title">${c.title||'My capsule'}</div>
-        <div class="ci-meta">${c.openedAt?'❄ Opened':'🔒 Sealed · '+days+' days away'} · To: ${c.recipLabel||'You'}</div>
+        <div class="ci-date">${esc(c.unlockLabel)}</div>
+        <div class="ci-title">${esc(c.title||'My capsule')}</div>
+        <div class="ci-meta">${c.openedAt?'❄ Opened':'🔒 Sealed · '+days+' days away'} · To: ${esc(c.recipLabel||'You')}</div>
       </div>
       <div class="ci-arrow">›</div>`;
     container.appendChild(div);
@@ -1084,7 +1180,6 @@ function showDetail(id){
     : days>0 ? 'Sealed until '+capsule.unlockLabel+'. It opens only when the date arrives.'
              : 'The date has arrived. Hold the orb to thaw it.';
   document.getElementById('reveal-btn').textContent = opened ? '❄ Replay the thaw' : days>0 ? '❄ Try to open it' : '❄ Hold to thaw';
-  document.getElementById('thaw-preview-btn').style.display = (!opened && days>0) ? 'block' : 'none';
   go('s-detail');
   buildProgressMap(capsule);
 }
@@ -1290,12 +1385,387 @@ async function renderMedia(container,capsule,scope){
   if(!container.children.length){ const n=document.createElement('div'); n.className='media-note'; n.textContent='Attachments aren\'t on this device.'; container.appendChild(n); }
 }
 
+// ── CY GUIDE ──
+// Optional: URL of your own server that takes {prompt, tier} and answers {text}. Leave empty to use built-in guided mode
+// (or Claude, when this page is opened inside Claude).
+const GUIDE_ENDPOINT='';
+const GUIDE={sample:null,kind:null,who:null,qs:[],starters:[],answers:[],step:0,ctl:null,ai:false,res:null,busy:false,typer:0,tries:0};
+const G_KINDS=[
+ {id:'letter',label:'✉ A letter',type:'message',name:'a letter',glow:'#8FC3DD'},
+ {id:'advice',label:'💡 Advice',type:'message',name:'advice',glow:'#F5C97A'},
+ {id:'prediction',label:'🔮 Predictions',type:'prediction',name:'predictions',glow:'#B9A8F0'},
+ {id:'memory',label:'📸 A memory',type:'message',name:'a memory',glow:'#F5A97A'},
+ {id:'thanks',label:'🙏 Gratitude',type:'message',name:'gratitude',glow:'#F5C97A'},
+ {id:'unsaid',label:'💬 Something unsaid',type:'message',name:'something unsaid',glow:'#8FC3DD'}
+];
+const G_WHO=['Me, in the future','A friend','My partner','My child','My family','Someone else'];
+const G_Q={
+ letter:['What is going on in your life right now?','What do you want them to remember about today?','What do you hope has happened by the time they read this?'],
+ advice:['What is one thing you wish someone had told you earlier?','What mistake would you like them to avoid?','What should they never forget about themselves?'],
+ prediction:['What do you think will be different by then?','What is one bold guess you would put your name on?','What do you hope you are wrong about?'],
+ memory:['What moment do you want to keep?','What can you see, hear or smell in it?','Why does it matter to you?'],
+ thanks:['Who or what are you grateful for right now?','What did they do that you want to remember?','What would you like to say that you rarely do?'],
+ unsaid:['What is something you have not said out loud yet?','Why has it been hard to say?','What do you hope happens once it is said?']
+};
+const G_START={
+ letter:[['I just started something new','Life is busy but good','I am tired, but hopeful'],['That I did my best','That the small things mattered','That I was brave about this'],['That you are happy and healthy','That we got where we wanted','That you finally rested']],
+ advice:[['Ask for help sooner','Rest is not laziness','Your first draft is allowed to be bad'],['Staying quiet when I should have spoken','Comparing myself to others','Saying yes to everything'],['You are enough as you are','Your people matter more than work','Slow progress still counts']],
+ prediction:[['Phones will look very different','Work will feel different','Prices will be higher'],['I will have moved cities','I will be in a different job','We will all use something new'],['That I was wrong to be scared','That we lose touch','That nothing changes']],
+ memory:[['A quiet morning with someone','A trip I never want to forget','A small joke that got big'],['Warm light and laughing','The smell of food cooking','Music in the background'],['I was truly happy','I did not know it would end','It shows who I was then']],
+ thanks:[['My family','A friend who showed up','A teacher or mentor'],['They stayed when it was hard','They believed in me early','They made time for me'],['I could not have done it without you','I wish I said this more','You changed my life']],
+ unsaid:[['I miss you','I am proud of you','I am sorry'],['I did not know how','I was afraid of the answer','The timing never felt right'],['That it opens a conversation','That we can both move on','That you feel less alone']]
+};
+const G_REACT=['Love that.','That is a good one to keep.','Thank you for sharing that.','That is specific. It will mean a lot later.','I can picture that.'];
+const G_LEAD={
+ letter:['Right now: ','I want you to remember: ','What I hope for you: '],
+ advice:['Something I wish I had known: ','One thing to avoid: ','Never forget: '],
+ prediction:['I think that by now, ','My boldest guess: ','I hope I am wrong about: '],
+ memory:['The moment: ','What it was like: ','Why it matters: '],
+ thanks:['I am grateful for: ','I remember: ','What I rarely say: '],
+ unsaid:['What I have not said: ','Why it has been hard: ','What I hope: ']
+};
+const G_IDEAS={
+ letter:[['photo','A photo of where you are today, or something on your desk.'],['voice','Read the last line out loud so they can hear your voice.'],['date','Open it on your next birthday, or one year from today.']],
+ advice:[['photo','A photo of a place that taught you something.'],['voice','Say your one piece of advice in your own voice.'],['date','Open it on a day they will face something big.']],
+ prediction:[['photo','A screenshot of the news or prices of today, to compare later.'],['voice','Say your boldest guess out loud, with today\'s date.'],['date','Pick a round-number date, like five or ten years from now.']],
+ memory:[['photo','A photo from the moment, or the closest thing you have.'],['voice','Describe the sounds and smells of it.'],['date','Open it on the anniversary of that moment.']],
+ thanks:[['photo','A photo of the two of you, or of something they gave you.'],['voice','Say thank you the way you would in person.'],['date','Open it on a day that matters to them.']],
+ unsaid:[['photo','A photo that makes you think of them.'],['voice','Record it if writing it feels harder than saying it.'],['date','Pick a date that gives you time, but not too much.']]
+};
+const G_SAL={'Me, in the future':'Dear future me,','A friend':'Dear friend,','My partner':'Dear love,','My child':'Dear you,','My family':'Dear family,','Someone else':'Dear you,'};
+const $g=id=>document.getElementById(id);
+const gSleep=ms=>new Promise(r=>setTimeout(r,ms));
+function gBuzz(){try{navigator.vibrate&&navigator.vibrate(8)}catch(e){}}
+
+function guideKind(){return G_KINDS.find(k=>k.id===GUIDE.kind)||G_KINDS[0];}
+function parseLooseJSON(t){
+  t=String(t||'').trim();
+  try{return JSON.parse(t);}catch(e){}
+  const a=Math.min(...['{','['].map(c=>{const i=t.indexOf(c);return i<0?1e9:i}));
+  const b=Math.max(t.lastIndexOf('}'),t.lastIndexOf(']'));
+  if(a<1e9&&b>a){try{return JSON.parse(t.slice(a,b+1));}catch(e){}}
+  throw {code:'invalid_json'};
+}
+async function guideCall(prompt,tier){
+  GUIDE.ctl=new AbortController();
+  if(GUIDE.sample) return await GUIDE.sample.json(prompt,{modelTier:tier,cache:false,signal:GUIDE.ctl.signal});
+  if(GUIDE_ENDPOINT){
+    const r=await fetch(GUIDE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:prompt,tier:tier}),signal:GUIDE.ctl.signal});
+    if(!r.ok) throw {code:'upstream_error'};
+    const j=await r.json(); return parseLooseJSON(j.text);
+  }
+  throw {code:'not_available'};
+}
+function guideAIReady(){return !!(GUIDE.sample||GUIDE_ENDPOINT);}
+
+// ---- Cy's orb and progress ----
+function orb(state){
+  const o=$g('g-big'); o.classList.remove('think','heard','listen');
+  if(state){void o.offsetWidth; o.classList.add(state); if(state==='heard') setTimeout(()=>o.classList.remove('heard'),650);}
+}
+function progress(){
+  const dots=$g('g-prog').children, got=GUIDE.answers.filter(a=>a).length;
+  for(let i=0;i<3;i++){ dots[i].className = i<got?'on':(i===GUIDE.step&&GUIDE.step<3?'now':''); }
+}
+
+// ---- chat UI helpers ----
+function gBubble(who,text,cls){
+  const d=document.createElement('div'); d.className=(who==='cy'?'g-b':'g-u')+(cls?' '+cls:''); d.textContent=text;
+  $g('g-feed').appendChild(d); gScroll(); return d;
+}
+function gTyping(){
+  const d=document.createElement('div'); d.className='g-b typing'; d.innerHTML='<span class="g-dots"><i></i><i></i><i></i></span>';
+  $g('g-feed').appendChild(d); gScroll(); orb('think'); return d;
+}
+function gScroll(){const l=$g('g-log'); setTimeout(()=>{l.scrollTop=l.scrollHeight},30);}
+function gChips(items,onPick,cls){
+  const old=$g('g-chips'); if(old) old.remove();
+  const box=document.createElement('div'); box.className='g-chips'; box.id='g-chips';
+  items.forEach(it=>{
+    const b=document.createElement('button'); b.type='button'; b.className='g-chip'+(it.soft?' soft':'')+(cls?' '+cls:''); b.textContent=it.label;
+    b.onclick=()=>{gBuzz();onPick(it,box)}; box.appendChild(b);
+  });
+  $g('g-feed').appendChild(box); gScroll();
+}
+function gInput(on,placeholder){
+  $g('g-in').classList.toggle('off',!on);
+  const t=$g('g-text'); t.value=''; t.placeholder=placeholder||'Type your answer…';
+  if(on) setTimeout(()=>t.focus(),50);
+}
+
+// ---- flow ----
+function openGuide(){
+  stopMic(); finishTyping();
+  GUIDE.ai=guideAIReady(); GUIDE.kind=null; GUIDE.who=null; GUIDE.qs=[]; GUIDE.starters=[]; GUIDE.answers=[]; GUIDE.step=0; GUIDE.res=null; GUIDE.busy=false;
+  $g('g-feed').innerHTML=''; $g('g-mode').textContent=GUIDE.ai?'Writing help from Claude':'Guided questions';
+  $g('guide').style.setProperty('--g-glow','#8FC3DD'); progress(); orb(null);
+  $g('guide').classList.add('show'); document.body.style.overflow='hidden';
+  gBubble('cy','Hi, I\'m Cy. I\'ll ask a few quick questions and help you write a capsule you\'ll love. What kind is it?');
+  if(GUIDE.ai) gBubble('cy','Your answers are sent to Claude to write suggestions. Nothing is saved by this step.','small');
+  gInput(false);
+  gChips(G_KINDS.map(k=>({label:k.label,id:k.id})),it=>{
+    GUIDE.kind=it.id; $g('guide').style.setProperty('--g-glow',guideKind().glow); orb('heard'); gBubble('u',it.label); askWho();
+  });
+}
+function closeGuide(){
+  stopMic(); finishTyping();
+  if(GUIDE.ctl) GUIDE.ctl.abort();
+  $g('guide').classList.remove('show'); document.body.style.overflow='';
+}
+async function askWho(){
+  await gSleep(250);
+  gBubble('cy','Lovely. Who will open it?');
+  gChips(G_WHO.map(w=>({label:w})),it=>{GUIDE.who=it.label;orb('heard');gBubble('u',it.label);askNext();});
+}
+function aiTurnPrompt(){
+  const k=guideKind(), n=GUIDE.step+1;
+  const qa=GUIDE.qs.slice(0,GUIDE.step).map((q,i)=>'Q: '+q+'\nA: '+(GUIDE.answers[i]||'(skipped)')).join('\n\n')||'(nothing yet)';
+  return 'You are Cy, a warm, calm guide inside Cyro, an app where people seal a message that stays locked until a date they choose. You are helping the person write a capsule they will love through a short, friendly conversation of exactly 3 questions. This is question '+n+' of 3.\n\n'+
+   'Capsule kind: '+k.name+'\nWho will open it: '+GUIDE.who+'\n\nConversation so far:\n'+qa+'\n\n'+
+   'First judge their last answer (skip this if there is none or it was skipped): "answered" is true if it genuinely responds to the previous question. A short, informal or brief answer still counts. It is false only if it is gibberish, clearly unrelated to the question, a dodge, or an "I do not know" with no content. If false, "clarify" is one friendly sentence (max 24 words) that gently says you did not quite catch it and rephrases the previous question with a tiny example; otherwise "clarify" is an empty string.\n\n'+
+   'Then write three things (when answered is false, "question" is empty and "starters" are 3 example answers for the PREVIOUS question):\n1. "reaction": '+(n===1?'an empty string.':'one warm sentence reacting to their last answer, showing you listened by referring to something specific they said. Max 18 words. Sincere, no exclamation marks, no flattery. If their last answer was skipped, use an empty string.')+'\n'+
+   '2. "question": the next question. Under 16 words, one sentence, concrete and easy to answer, building on what they have said. '+(n===1?'Ask what is true or going on for them right now.':n===2?'Ask for a specific detail, moment or thing that matters most.':'Ask what they hope for the person who opens it.')+'\n'+
+   '3. "starters": 3 short example answers (max 7 words each, first person) the person could tap to get going, relevant to this question.\n\n'+
+   'If their last answer suggests they are in distress or thinking about harming themselves, instead reply with only {"care":"a short, kind message encouraging them to reach out to someone they trust or a local helpline"}.\n\nReply with only JSON like {"answered":true,"clarify":"","reaction":"","question":"","starters":["","",""]}';
+}
+function aiValidatePrompt(){
+  const k=guideKind(), s=GUIDE.step-1;
+  return 'You are Cy, a warm guide inside Cyro, a time capsule app. Validate only. Capsule kind: '+k.name+'.\n\nQuestion: '+GUIDE.qs[s]+'\nAnswer: '+GUIDE.answers[s]+'\n\n"answered" is true if the answer genuinely responds to the question. A short, informal or brief answer still counts. It is false only if it is gibberish, clearly unrelated, a dodge, or an "I do not know" with no content. If false, "clarify" is one friendly sentence (max 24 words) that gently says you did not quite catch it and rephrases the question with a tiny example, and "starters" are 3 short first-person example answers (max 7 words each). If true, "clarify" is empty and "starters" is an empty array.\n\nIf the answer suggests the person is in distress or thinking about harming themselves, instead reply with only {"care":"a short, kind message encouraging them to reach out to someone they trust or a local helpline"}.\n\nReply with only JSON like {"answered":true,"clarify":"","starters":[]}';
+}
+// ---- when an answer does not answer the question ----
+function judgeLocal(t){
+  const s=t.trim().toLowerCase().replace(/[.!]+$/,'');
+  if(/^(idk|i dont know|i don'?t know|dunno|no idea|not sure|nothing|none|no|n\/a|na|nope|nvm|whatever)$/.test(s)||/^[?.\-\s]+$/.test(s)) return 'idk';
+  if(!/\p{L}/u.test(s)) return 'short';
+  if(/^(ok|okay|yes|yeah|yep|sure|hi|hello|hey|lol|haha|test|testing|hmm|hm|um|uh)$/.test(s)) return 'short';
+  if(/(.)\1{3,}/.test(s)||/^(asdf|qwer|zxcv|hjkl|sdfg|dfgh|lorem)/.test(s)) return 'junk';
+  const words=s.split(/\s+/).map(w=>w.normalize('NFD').replace(/[\u0300-\u036f]/g,'')).filter(w=>/^[a-z]+$/.test(w));
+  if(words.length&&words.length<=3&&words.every(w=>w.length>=4&&!/[aeiouy]/.test(w))) return 'junk';
+  return null;
+}
+const G_CLARIFY={
+  idk:'That is okay, it can be hard to know where to start. Pick one of these, or say the first thing that comes to mind.',
+  short:'Could you tell me a little more? Even one sentence works.',
+  junk:'I did not quite catch that. Could you say it in a few words?'
+};
+async function clarify(msg){
+  const s=GUIDE.step; GUIDE.tries++;
+  if(GUIDE.tries>=3){
+    await gSleep(250); gBubble('cy','No problem, we will skip that one.');
+    GUIDE.answers[s]=''; GUIDE.step++; GUIDE.tries=0; progress(); await gSleep(250); askNext(); return;
+  }
+  await gSleep(300); orb(null); gBubble('cy',msg);
+  await gSleep(250); showQuestion(s,true);
+}
+function showQuestion(s,again){
+  gBubble('cy',(again?'Let me ask it another way. ':'')+(s+1)+' of 3. '+GUIDE.qs[s]);
+  GUIDE.busy=false; gInput(true);
+  const items=(GUIDE.starters[s]||[]).map(x=>({label:x}));
+  const lastChance=s===2&&!GUIDE.answers.slice(0,2).some(a=>a)&&!GUIDE.answers[2];
+  if(!lastChance) items.push({label:'Skip this one',soft:true,skip:true});
+  gChips(items,(it)=>{
+    if(it.skip){submitAnswer(true);return;}
+    const t=$g('g-text'); t.value=it.label+' '; t.focus(); t.setSelectionRange(t.value.length,t.value.length);
+    const c=$g('g-chips'); if(c) c.remove();
+  },'start');
+}
+function rollbackAnswer(){ GUIDE.step--; GUIDE.answers.length=GUIDE.step; progress(); }
+async function askNext(){
+  if(GUIDE.step>=3){
+    if(!GUIDE.answers.some(a=>a)){
+      gBubble('cy','I can only write from your words, and I don\'t have any yet. Let\'s try again. Answer at least one.');
+      GUIDE.step=0; GUIDE.answers=[]; GUIDE.qs=[]; GUIDE.starters=[]; GUIDE.tries=0; progress(); askNext(); return;
+    }
+    // check the last answer before writing
+    if(GUIDE.ai&&GUIDE.answers[2]){
+      GUIDE.busy=true; const th=gTyping();
+      try{
+        const r=await guideCall(aiValidatePrompt(),'quick'); th.remove(); orb(null);
+        if(r&&r.care){ gBubble('cy',String(r.care).slice(0,600)); GUIDE.busy=false; return; }
+        if(r&&r.answered===false){
+          rollbackAnswer(); {const st=(Array.isArray(r.starters)?r.starters:[]).map(x=>String(x).trim()).filter(Boolean).slice(0,3); if(st.length) GUIDE.starters[GUIDE.step]=st;}
+          await clarify(String(r.clarify||G_CLARIFY.short).slice(0,200)); return;
+        }
+      }catch(e){ th.remove(); orb(null); if(e&&e.code==='cancelled'){GUIDE.busy=false;return;} }
+    }
+    GUIDE.tries=0; makeDraft(); return;
+  }
+  GUIDE.busy=true; progress();
+  const s=GUIDE.step, prev=GUIDE.answers[s-1];
+  let q=null, starters=null, reaction='';
+  if(GUIDE.ai){
+    const th=gTyping();
+    try{
+      const r=await guideCall(aiTurnPrompt(),'quick'); th.remove(); orb(null);
+      if(r&&r.care){ gBubble('cy',String(r.care).slice(0,600)); GUIDE.busy=false; return; }
+      if(r&&r.answered===false&&s>0&&prev){
+        rollbackAnswer();
+        const st=(Array.isArray(r.starters)?r.starters:[]).map(x=>String(x).trim()).filter(Boolean).slice(0,3);
+        if(st.length) GUIDE.starters[GUIDE.step]=st;
+        await clarify(String(r.clarify||G_CLARIFY.short).slice(0,200)); return;
+      }
+      q=String(r&&r.question||'').trim(); if(!q) throw {code:'invalid_json'};
+      reaction=String(r.reaction||'').trim().slice(0,160);
+      starters=(Array.isArray(r.starters)?r.starters:[]).map(x=>String(x).trim()).filter(Boolean).slice(0,3);
+    }catch(e){
+      th.remove(); orb(null);
+      if(e&&e.code==='cancelled'){GUIDE.busy=false;return;}
+      gBubble('cy','I couldn\'t reach my writing helper, so I\'ll use my own questions.','small'); GUIDE.ai=false; $g('g-mode').textContent='Guided questions';
+    }
+  }
+  if(!q){
+    q=G_Q[GUIDE.kind][s]; starters=G_START[GUIDE.kind][s];
+    reaction=prev?G_REACT[Math.floor(Math.random()*G_REACT.length)]:'';
+  }
+  GUIDE.qs[s]=q; GUIDE.starters[s]=starters||[];
+  if(reaction&&s>0){ gBubble('cy',reaction,'react'); await gSleep(450); }
+  showQuestion(s,false);
+}
+function submitAnswer(skip){
+  if(GUIDE.busy) return;
+  stopMic();
+  const t=$g('g-text'); const text=skip?'':t.value.trim();
+  if(!skip&&!text) return;
+  const c=$g('g-chips'); if(c) c.remove();
+  if(!skip){
+    const bad=judgeLocal(text);
+    if(bad){ gBubble('u',text); gInput(false); GUIDE.busy=true; clarify(G_CLARIFY[bad]); return; }
+  }
+  gBubble('u',skip?'Skip':text); GUIDE.answers[GUIDE.step]=text; GUIDE.step++; GUIDE.tries=0; gInput(false);
+  if(text) orb('heard'); progress(); askNext();
+}
+$g('g-send').addEventListener('click',()=>submitAnswer(false));
+$g('g-text').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submitAnswer(false)}});
+
+// ---- speaking an answer (where the browser supports it) ----
+const G_SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+let gRec=null;
+if(G_SR) $g('g-mic').hidden=false;
+function stopMic(){ if(gRec){try{gRec.stop()}catch(e){} gRec=null;} const m=$g('g-mic'); if(m) m.classList.remove('on'); orb(null); }
+$g('g-mic').addEventListener('click',()=>{
+  if(!G_SR) return;
+  if(gRec){stopMic();return;}
+  const t=$g('g-text'), base=t.value.trim(), m=$g('g-mic');
+  try{
+    gRec=new G_SR(); gRec.lang=navigator.language||'en-US'; gRec.interimResults=true; gRec.continuous=false;
+    gRec.onresult=e=>{let s='';for(let i=0;i<e.results.length;i++)s+=e.results[i][0].transcript;t.value=((base?base+' ':'')+s).slice(0,400)};
+    gRec.onend=()=>{gRec=null;m.classList.remove('on');orb(null)};
+    gRec.onerror=ev=>{gRec=null;m.classList.remove('on');orb(null);
+      if(ev.error==='not-allowed'||ev.error==='service-not-allowed'){gBubble('cy','I can\'t use the microphone here, so please type your answer.','small');m.hidden=true;}};
+    gRec.start(); m.classList.add('on'); orb('listen');
+  }catch(e){gRec=null;m.hidden=true;}
+});
+
+function fallbackDraft(){
+  const lead=G_LEAD[GUIDE.kind], parts=[];
+  GUIDE.answers.forEach((a,i)=>{ if(a) parts.push(lead[i]+a.replace(/^\s+|\s+$/g,'')); });
+  const self=GUIDE.who==='Me, in the future';
+  const body=parts.length?parts.join('\n\n'):'';
+  const sign=self?'Be kind to yourself.\n\n— Me, today':'With love,\nMe, today';
+  const k=guideKind();
+  return {title:k.name.charAt(0).toUpperCase()+k.name.slice(1)+(self?' to future me':''),emoji:k.id==='prediction'?'🔮':'✉️',
+    draft:(G_SAL[GUIDE.who]||'Dear you,')+'\n\n'+body+'\n\n'+sign,
+    ideas:G_IDEAS[GUIDE.kind].map(i=>({kind:i[0],text:i[1]}))};
+}
+async function makeDraft(){
+  GUIDE.busy=true; gInput(false); progress();
+  await gSleep(300);
+  gBubble('cy','Thank you. Give me a moment to put it together.');
+  const th=gTyping();
+  let res=null;
+  if(GUIDE.ai){
+    const k=guideKind();
+    const qa=GUIDE.qs.map((q,i)=>'Q: '+q+'\nA: '+(GUIDE.answers[i]||'(skipped)')).join('\n\n');
+    const p='You are Cy, a warm, calm guide inside Cyro, an app where people seal a message that stays locked until a date they choose.\n\nUsing ONLY the details below, write the capsule message in the person\'s own voice (first person). Rules: use their words and details; do not invent names, events or facts; 110 to 200 words; warm, specific, plain language; address the reader to fit "'+GUIDE.who+'" (for "Me, in the future" write to future me); end with a line that still makes sense when read years later. No headings.\n\nKind: '+k.name+'\nWho will open it: '+GUIDE.who+'\n\n'+qa+'\n\nAlso give a title (max 40 characters), one emoji, and 3 short ideas, each under 90 characters and specific to this capsule: one photo to add, one voice note to record, one date to open it on.\n\nIf the answers suggest the person is in distress or thinking about harming themselves, do not write a draft. Reply with only {"care":"a short, kind message encouraging them to reach out to someone they trust or a local helpline"}.\n\nOtherwise reply with only JSON like {"title":"","emoji":"","draft":"","ideas":[{"kind":"photo","text":""},{"kind":"voice","text":""},{"kind":"date","text":""}]}';
+    try{
+      const r=await guideCall(p,'default'); th.remove(); orb(null);
+      if(r&&r.care){ gBubble('cy',String(r.care).slice(0,600)); GUIDE.busy=false; return; }
+      if(!r||typeof r.draft!=='string'||!r.draft.trim()) throw {code:'invalid_json'};
+      res={title:String(r.title||'').slice(0,60),emoji:String(r.emoji||'✉️').slice(0,2),draft:r.draft.slice(0,2000),
+        ideas:(Array.isArray(r.ideas)?r.ideas:[]).slice(0,3).map(i=>({kind:String(i.kind||'idea'),text:String(i.text||'').slice(0,140)})).filter(i=>i.text)};
+    }catch(e){
+      th.remove(); orb(null); if(e&&e.code==='cancelled'){GUIDE.busy=false;return;}
+      gBubble('cy','I couldn\'t reach my writing helper, so I put your answers together myself.','small'); GUIDE.ai=false; $g('g-mode').textContent='Guided questions';
+    }
+  } else { await gSleep(700); th.remove(); orb(null); }
+  if(!res) res=fallbackDraft();
+  GUIDE.res=res; GUIDE.busy=false; showResult();
+}
+
+// ---- the draft writes itself ----
+function typeInto(el,text){
+  finishTyping(); el.value=''; let i=0; GUIDE.typerEl=el; GUIDE.typerText=text; orb('think');
+  GUIDE.typer=setInterval(()=>{
+    i=Math.min(text.length,i+3); el.value=text.slice(0,i); el.scrollTop=el.scrollHeight;
+    if(i>=text.length) finishTyping();
+  },22);
+}
+function finishTyping(){
+  if(GUIDE.typer){clearInterval(GUIDE.typer);GUIDE.typer=0;}
+  if(GUIDE.typerEl){GUIDE.typerEl.value=GUIDE.typerText;GUIDE.typerEl.scrollTop=0;GUIDE.typerEl=null;orb('heard');}
+}
+const G_TONES=[{label:'Shorter',ins:'shorter (about 60% of the length)'},{label:'Warmer',ins:'warmer and more heartfelt'},{label:'More playful',ins:'lighter and a little funny, without being silly'},{label:'More personal',ins:'more personal and specific, using more of the concrete details they gave'}];
+function showResult(){
+  const r=GUIDE.res, has=$g('msg-input').value.trim().length>0;
+  const wrap=document.createElement('div'); wrap.className='g-res';
+  const ideas=r.ideas.map(i=>'<div class="g-idea"><b>'+({photo:'📷 Photo',voice:'🎙 Voice',date:'📅 Date'}[i.kind]||'💡 Idea')+'</b><span></span></div>').join('');
+  wrap.innerHTML='<h3>Here\'s a first draft. Make it yours.</h3><textarea id="g-draft" aria-label="Draft"></textarea>'+
+    '<div><label for="g-title">Title</label><input id="g-title" type="text" maxlength="60"></div>'+
+    (r.ideas.length?'<div class="g-ideas"><label>Make it richer</label>'+ideas+'</div>':'')+
+    '<div class="g-btns" id="g-btns"></div>';
+  $g('g-feed').appendChild(wrap);
+  $g('g-title').value=r.title;
+  wrap.querySelectorAll('.g-idea span').forEach((s,i)=>{s.textContent=r.ideas[i].text});
+  const ta=$g('g-draft'); ta.addEventListener('pointerdown',finishTyping); ta.addEventListener('focus',finishTyping);
+  typeInto(ta,r.draft);
+  const btns=$g('g-btns');
+  const add=(label,fn,ghost)=>{const b=document.createElement('button');b.type='button';b.textContent=label;if(ghost)b.className='ghost';b.onclick=fn;btns.appendChild(b);return b;};
+  if(has){ add('Replace my text',()=>applyDraft('replace')); add('Add below my text',()=>applyDraft('append'),true); }
+  else add('Use this draft',()=>applyDraft('replace'));
+  add('Start over',()=>openGuide(),true);
+  if(GUIDE.ai){
+    const tones=document.createElement('div'); tones.className='g-chips';
+    G_TONES.forEach(t=>{const b=document.createElement('button');b.type='button';b.className='g-chip';b.textContent=t.label;b.onclick=()=>refineDraft(t,b);tones.appendChild(b);});
+    wrap.insertBefore(tones,$g('g-btns'));
+  }
+  gScroll();
+}
+async function refineDraft(tone,btn){
+  finishTyping();
+  if(GUIDE.busy) return; GUIDE.busy=true;
+  const cur=$g('g-draft').value.trim(); const old=btn.textContent; btn.textContent='Rewriting…'; orb('think');
+  const p='Rewrite this capsule message to be '+tone.ins+'. Keep the same facts and the same first-person voice. Do not add new facts. Keep it under 220 words.\n\nMessage:\n'+cur+'\n\nReply with only JSON like {"draft":"..."}';
+  try{
+    const r=await guideCall(p,'default');
+    if(!r||typeof r.draft!=='string'||!r.draft.trim()) throw {code:'invalid_json'};
+    typeInto($g('g-draft'),r.draft.slice(0,2000));
+  }catch(e){ orb(null); if(!(e&&e.code==='cancelled')) gBubble('cy','That rewrite didn\'t work. Your draft is unchanged. Try again.','small'); }
+  btn.textContent=old; GUIDE.busy=false;
+}
+function applyDraft(mode){
+  finishTyping();
+  const text=$g('g-draft').value.trim(); if(!text) return;
+  const ta=$g('msg-input');
+  ta.value = (mode==='append'&&ta.value.trim()) ? ta.value.trim()+'\n\n'+text : text;
+  const ti=$g('title-input'), t=$g('g-title').value.trim(); if(t&&!ti.value.trim()) ti.value=t;
+  const ei=$g('emoji-input'); if(GUIDE.res&&GUIDE.res.emoji&&!ei.value.trim()) ei.value=GUIDE.res.emoji;
+  const k=guideKind();
+  if(k.type==='prediction'){const tabs=document.querySelectorAll('.type-tab'); if(tabs[1]) switchType(tabs[1],'prediction');}
+  onMsgInput(ta);
+  const n=$g('guide-note'); n.textContent='Draft added. Read it through and change anything so it sounds like you.'; n.style.display='block';
+  closeGuide(); ta.focus(); window.scrollTo(0,0);
+}
+if(window.claude&&claude.use){
+  claude.use('sample').then(s=>{ if(s) GUIDE.sample=s; }).catch(()=>{});
+}
+
 // ── THAW ──
 const THAW={raf:0,last:0,progress:0,holding:false,done:false,locked:false,preview:false,capsule:null,days:0,flakes:[],timers:[],shivered:false};
 const HOLD_MS=1600, LOCK_CAP=0.3, RING=779.1;
 const $t=id=>document.getElementById(id);
 
-function openThaw(preview){
+function openThaw(){
+  const preview=false;
   const capsule=getCapsules().find(c=>c.id===currentDetailId);
   if(!capsule) return;
   const days=daysUntil(new Date(capsule.unlockDate));
@@ -1309,7 +1779,7 @@ function openThaw(preview){
   $t('thaw-hint').textContent = THAW.locked ? 'Frozen for '+days+' more day'+(days===1?'':'s') : 'Press and hold to thaw';
   $t('tl-title').textContent=capsule.title||'My capsule';
   $t('tl-msg').textContent=capsule.message||'';
-  releaseMedia('thaw'); $t('tl-media').innerHTML='';
+  releaseMedia('thaw'); $t('tl-media').innerHTML=''; $t('tl-share-st').textContent=''; $t('tl-share-line').value='';
   renderMedia($t('tl-media'),capsule,'thaw');
   const held=Math.max(0,Math.floor((Date.now()-new Date(capsule.sealedAt||Date.now()))/86400000));
   $t('tl-foot').textContent = preview ? 'preview · this is how it will open' : 'opened · held '+held+' day'+(held===1?'':'s')+' … promise kept.';
@@ -1429,6 +1899,102 @@ function crackOpen(){
   },800));
 }
 
+
+// ── SHARE THE THAW (short vertical clip, never includes the message) ──
+const SH_W=1080, SH_H=1920, SH_DUR=6.6;
+function shRand(seed){ let s=seed; return ()=>{ s=(s*16807)%2147483647; return (s-1)/2147483646; }; }
+const shEase=x=>x<=0?0:x>=1?1:1-Math.pow(1-x,3);
+const shClamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const SH_CRYS=(()=>{ const r=shRand(42), out=[]; for(let i=0;i<22;i++){ const a=(i/22)*6.283+(r()-.5)*.3, len=300+r()*380, br=[]; for(let k=0;k<3;k++) br.push({at:.35+k*.2+r()*.08, side:(r()>.5?1:-1), l:.22+r()*.18}); out.push({a,len,br}); } return out; })();
+function shDrawFrame(ctx,t,info){
+  const W=SH_W,H=SH_H,cx=W/2,cy=H*.46;
+  const warm=shEase((t-2.5)/1.1);
+  // background
+  const g=ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,'#080F18'); g.addColorStop(1,'#13263a');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  if(warm>0){ const w=ctx.createRadialGradient(cx,cy,0,cx,cy,H*.75); w.addColorStop(0,'rgba(255,196,120,'+(.85*warm)+')'); w.addColorStop(.5,'rgba(214,120,90,'+(.35*warm)+')'); w.addColorStop(1,'rgba(8,15,24,0)'); ctx.fillStyle=w; ctx.fillRect(0,0,W,H); }
+  // frost crystals
+  const grow=shEase(t/2.3), fade=1-shEase((t-2.5)/.9);
+  if(fade>0){
+    ctx.save(); ctx.translate(cx,cy); ctx.lineCap='round';
+    SH_CRYS.forEach(c=>{
+      const L=c.len*grow; ctx.strokeStyle='rgba(168,214,236,'+(.75*fade)+')'; ctx.lineWidth=3;
+      ctx.beginPath(); ctx.moveTo(Math.cos(c.a)*110,Math.sin(c.a)*110); ctx.lineTo(Math.cos(c.a)*L,Math.sin(c.a)*L); ctx.stroke();
+      c.br.forEach(b=>{ const bx=Math.cos(c.a)*L*b.at, by=Math.sin(c.a)*L*b.at, ba=c.a+b.side*.8, bl=L*b.l*grow; if(L*b.at<130) return;
+        ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(bx,by); ctx.lineTo(bx+Math.cos(ba)*bl,by+Math.sin(ba)*bl); ctx.stroke(); });
+    });
+    ctx.restore();
+  }
+  // ring + orb
+  const prog=shEase(t/2.2);
+  ctx.save(); ctx.translate(cx,cy);
+  ctx.lineWidth=10; ctx.strokeStyle='rgba(255,255,255,.12)'; ctx.beginPath(); ctx.arc(0,0,250,0,6.283); ctx.stroke();
+  ctx.strokeStyle=warm>0?'rgba(255,226,170,'+(1-.4*warm)+')':'#8FC3DD'; ctx.beginPath(); ctx.arc(0,0,250,-1.5708,-1.5708+6.283*prog); ctx.stroke();
+  const orbR=120+(t>2.2&&t<2.6?(t-2.2)*300:0)*(1-warm);
+  const og=ctx.createRadialGradient(-30,-30,10,0,0,orbR); og.addColorStop(0,warm>0?'#fff4d8':'#EAF6FC'); og.addColorStop(1,warm>0?'#f3b266':'#5E9FC4');
+  ctx.globalAlpha=1-.7*shEase((t-3.4)/.8); ctx.fillStyle=og; ctx.beginPath(); ctx.arc(0,0,orbR,0,6.283); ctx.fill(); ctx.globalAlpha=1;
+  // crack lines
+  if(t>2.2&&t<3.4){ const r=shRand(7); ctx.strokeStyle='rgba(255,255,255,'+(1-shEase((t-2.6)/.8))+')'; ctx.lineWidth=4; for(let i=0;i<9;i++){ let a=(i/9)*6.283+(r()-.5)*.5,x=0,y=0; ctx.beginPath(); ctx.moveTo(0,0); const reach=shEase((t-2.2)/.35); for(let k=0;k<4;k++){ a+=(r()-.5)*.7; const l=(60+r()*50)*reach; x+=Math.cos(a)*l; y+=Math.sin(a)*l; ctx.lineTo(x,y);} ctx.stroke(); } }
+  ctx.restore();
+  // text
+  ctx.textAlign='center';
+  const a1=shClamp((t-.3)/.6,0,1)*(1-shEase((t-2.4)/.4));
+  ctx.fillStyle='rgba(255,255,255,'+a1+')'; ctx.font='italic 600 60px Georgia, serif'; ctx.fillText('I sealed this for '+info.to+'.',cx,H*.16);
+  ctx.fillStyle='rgba(143,195,221,'+a1+')'; ctx.font='500 40px system-ui, sans-serif'; ctx.fillText(info.sealedLabel+'  ·  “'+info.title+'”',cx,H*.16+66);
+  // emoji inside the orb as it opens
+  const ae=shEase((t-3.0)/.6);
+  if(ae>0){ ctx.globalAlpha=ae; ctx.font='170px system-ui, "Apple Color Emoji", "Noto Color Emoji", sans-serif'; ctx.textBaseline='middle'; ctx.fillText(info.emoji,cx,cy+8); ctx.textBaseline='alphabetic'; ctx.globalAlpha=1; }
+  const a2=shEase((t-3.3)/.7);
+  ctx.fillStyle='rgba(255,255,255,'+a2+')'; ctx.font='italic 700 112px Georgia, serif'; ctx.fillText('Opened today.',cx,H*.16+20);
+  ctx.fillStyle='rgba(255,236,200,'+a2+')'; ctx.font='600 46px system-ui, sans-serif';
+  ctx.fillText(info.days>0?'A promise kept for '+info.days+(info.days===1?' day':' days'):'A promise kept',cx,H*.16+100);
+  const a3=shEase((t-4.2)/.7);
+  if(info.line){ ctx.fillStyle='rgba(255,255,255,'+a3+')'; ctx.font='italic 600 58px Georgia, serif'; shWrap(ctx,'“'+info.line+'”',cx,H*.68,W-220,74,3); }
+  const a4=shEase((t-4.9)/.7);
+  ctx.fillStyle='rgba(255,255,255,'+a4+')'; ctx.font='italic 700 84px Georgia, serif'; ctx.fillText('Cyro',cx,H*.84);
+  ctx.fillStyle='rgba(255,255,255,'+(.85*a4)+')'; ctx.font='500 40px system-ui, sans-serif'; ctx.fillText("A promise that doesn't expire.",cx,H*.84+66);
+}
+function shInfo(){
+  const c=THAW.capsule||{}; const sealed=new Date(c.sealedAt||Date.now()); const d=Math.max(0,Math.round((Date.now()-sealed)/864e5));
+  const fmt=x=>x.toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'});
+  const ag=$t('tl-share-line'); const line=(ag&&ag.value||'').trim().slice(0,90);
+  return {days:d, sealedLabel:fmt(sealed), openedLabel:fmt(new Date()), title:(c.title||'My capsule').slice(0,40), emoji:c.emoji||'✉️', to:c.recipType==='friend'?(c.recipLabel||'a friend'):'myself', line};
+}
+function shWrap(ctx,text,x,y,maxW,lh,maxLines){
+  const words=text.split(/\s+/), lines=[]; let cur='';
+  words.forEach(w=>{ const t=cur?cur+' '+w:w; if(ctx.measureText(t).width>maxW&&cur){lines.push(cur);cur=w;} else cur=t; });
+  if(cur) lines.push(cur); lines.slice(0,maxLines).forEach((l,i)=>ctx.fillText(l,x,y+i*lh));
+}
+function shDeliver(blob,name,statusEl){
+  const file=new File([blob],name,{type:blob.type});
+  const fallback=()=>{ const u=URL.createObjectURL(blob), a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),4000); statusEl.textContent='Saved to your downloads.'; };
+  if(navigator.canShare && navigator.canShare({files:[file]})){
+    navigator.share({files:[file],text:"A promise that doesn't expire. #Cyro"}).then(()=>{statusEl.textContent='Shared.';}).catch(e=>{ if(e&&e.name==='AbortError'){statusEl.textContent='';} else fallback(); });
+  } else fallback();
+}
+let _sharing=false;
+async function shareThaw(){
+  if(_sharing||!THAW.capsule) return; _sharing=true;
+  const btn=$t('tl-share'), st=$t('tl-share-st'); btn.disabled=true; const label=btn.textContent; btn.textContent='Making your clip…'; st.textContent='';
+  try{
+    const cv=document.createElement('canvas'); cv.width=SH_W; cv.height=SH_H; const ctx=cv.getContext('2d'); const info=shInfo();
+    const types=['video/mp4;codecs=avc1','video/mp4','video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'];
+    const mime=(window.MediaRecorder&&cv.captureStream)?types.find(t=>MediaRecorder.isTypeSupported(t)):null;
+    if(!mime){ // fallback: still image of the final frame
+      shDrawFrame(ctx,SH_DUR,info); const blob=await new Promise(r=>cv.toBlob(r,'image/png')); shDeliver(blob,'cyro-thaw.png',st);
+    } else {
+      const rec=new MediaRecorder(cv.captureStream(30),{mimeType:mime,videoBitsPerSecond:4e6}), chunks=[];
+      rec.ondataavailable=e=>{ if(e.data&&e.data.size) chunks.push(e.data); };
+      const done=new Promise(r=>rec.onstop=r); rec.start(250);
+      const t0=performance.now();
+      await new Promise(res=>{ (function loop(){ const t=(performance.now()-t0)/1000; shDrawFrame(ctx,Math.min(t,SH_DUR),info); if(t>=SH_DUR+.3) res(); else requestAnimationFrame(loop); })(); });
+      rec.stop(); await done;
+      const blob=new Blob(chunks,{type:mime.split(';')[0]}); shDeliver(blob,'cyro-thaw.'+(mime.indexOf('mp4')>-1?'mp4':'webm'),st);
+    }
+  }catch(e){ st.textContent="Couldn't make the clip on this device."; }
+  btn.disabled=false; btn.textContent=label; _sharing=false;
+}
+
 // hold controls
 (function(){
   const stage=$t('thaw-stage');
@@ -1460,7 +2026,7 @@ function submitFeedback(){
     type, desc, context,
     submittedAt: new Date().toISOString()
   });
-  localStorage.setItem('cyro_feedback', JSON.stringify(list));
+  try{ localStorage.setItem('cyro_feedback', JSON.stringify(list)); }catch(e){}
   document.getElementById('fb-type').value = 'bug';
   document.getElementById('fb-desc').value = '';
   document.getElementById('fb-context').value = '';
@@ -1482,9 +2048,9 @@ function renderFeedback(){
     div.style.cursor='default';
     div.innerHTML=`
       <div class="ci-body" style="min-width:0">
-        <div class="ci-date">${TYPE_LABELS[f.type]||f.type} · ${new Date(f.submittedAt).toLocaleDateString()}</div>
-        <div class="ci-title" style="white-space:normal">${f.desc}</div>
-        ${f.context?`<div class="ci-meta">While: ${f.context}</div>`:''}
+        <div class="ci-date">${esc(TYPE_LABELS[f.type]||f.type)} · ${new Date(f.submittedAt).toLocaleDateString()}</div>
+        <div class="ci-title" style="white-space:normal">${esc(f.desc)}</div>
+        ${f.context?`<div class="ci-meta">While: ${esc(f.context)}</div>`:''}
       </div>`;
     container.appendChild(div);
   });
@@ -1519,7 +2085,7 @@ function updateStreak(){
     return d.getFullYear()+'-'+(d.getMonth()+1);
   }))].sort();
   const streak = {months: sealedMonths, last: sealedMonths[sealedMonths.length-1]};
-  localStorage.setItem('cyro_streak', JSON.stringify(streak));
+  try{ localStorage.setItem('cyro_streak', JSON.stringify(streak)); }catch(e){}
   return streak;
 }
 
