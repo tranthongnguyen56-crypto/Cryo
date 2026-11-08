@@ -38,6 +38,22 @@ nav{
 }
 .nav-cta:hover{opacity:0.88;}
 
+
+/* ── GAME ── */
+.game-grid{display:grid;grid-template-columns:1fr;gap:40px;align-items:center;}
+@media(min-width:820px){.game-grid{grid-template-columns:1fr 320px;gap:64px;}}
+.game-copy .btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px;}
+.game-points{list-style:none;margin-top:22px;display:grid;gap:10px;}
+.game-points li{font-size:14px;color:var(--dark-soft);line-height:1.5;padding-left:22px;position:relative;}
+.game-points li::before{content:"";position:absolute;left:0;top:7px;width:8px;height:8px;border-radius:50%;background:var(--frost);}
+.game-points b{color:var(--dark-text);font-weight:600;}
+.game-phone{width:320px;max-width:100%;aspect-ratio:9/16;border-radius:26px;overflow:hidden;border:1px solid var(--dark-ring);box-shadow:0 0 70px rgba(127,216,255,.14);background:#050d1c;position:relative;margin:0 auto;}
+.game-phone iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+.game-poster{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;border:0;cursor:pointer;color:var(--dark-text);font:inherit;background:radial-gradient(ellipse at 50% 30%,#16396b,#050d1c 75%);}
+.game-poster .gp-logo{font-family:Georgia,serif;font-size:54px;font-weight:600;background:linear-gradient(180deg,#fff,#8fdcff 70%,#4aa8e0);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.game-poster .gp-sub{font-size:14px;color:var(--dark-soft);max-width:220px;line-height:1.5;}
+.game-poster .gp-play{margin-top:6px;background:var(--dark-text);color:var(--ink);font-weight:700;font-size:15px;padding:12px 28px;border-radius:100px;}
+
 /* ── SHARED ── */
 .wrap{max-width:1060px;margin:0 auto;padding:0 6vw;}
 .eyebrow{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--frost);font-weight:600;margin-bottom:14px;}
@@ -261,6 +277,15 @@ footer{
   .cta-banner{padding:40px 24px;margin:0 4vw;}
 }
 </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5J3WC9QD16"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5J3WC9QD16');
+</script>
 </head>
 <body>
 
@@ -270,6 +295,7 @@ footer{
   <div class="nav-links">
     <a href="#how">How it works</a>
     <a href="#trust">Why trust us</a>
+    <a href="#play">Play</a>
     <a href="#faq">FAQ</a>
   </div>
   <a class="nav-cta" href="cyro-app.html">Seal a capsule</a>
@@ -517,6 +543,37 @@ footer{
 
 <hr class="divider" style="margin-top:80px;">
 
+<!-- GAME -->
+<section class="section" id="play">
+  <div class="wrap">
+    <div class="game-grid">
+      <div class="game-copy">
+        <p class="eyebrow">Play</p>
+        <h2 class="section-title">Seal It: catch the memories before they melt.</h2>
+        <p class="section-sub">A quick game starring Cy. Slide the capsule, catch what matters, dodge the heat. Then make a real one.</p>
+        <ul class="game-points">
+          <li><b>Catch</b> photos, voice notes and love letters.</li>
+          <li><b>Dodge</b> the flames and the ticking clocks.</li>
+          <li><b>Grab</b> ❄️ to slow time, 🧲 to pull memories in.</li>
+        </ul>
+        <div class="btns">
+          <a class="btn-hero" href="cyro-game.html">Play full screen</a>
+          <a class="btn-hero-ghost" href="cyro-app.html">Seal a real capsule</a>
+        </div>
+      </div>
+      <div class="game-phone" id="game-phone">
+        <button class="game-poster" id="game-poster" type="button" aria-label="Play Seal It">
+          <span class="gp-logo">Cyro</span>
+          <span class="gp-sub">Slide Cy's capsule to catch memories.</span>
+          <span class="gp-play">Tap to play</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
 <!-- BE FIRST -->
 <section class="section">
   <div class="wrap" style="text-align:center;">
@@ -602,6 +659,15 @@ function toggleFaq(el){
   document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));
   if(!isOpen) item.classList.add('open');
 }
+</script>
+<script>
+(function(){
+  var p=document.getElementById('game-poster'); if(!p) return;
+  p.addEventListener('click',function(){
+    var f=document.createElement('iframe'); f.src='cyro-game.html'; f.title='Seal It, a Cyro game'; f.allow='autoplay';
+    p.parentNode.appendChild(f); p.remove();
+  });
+})();
 </script>
 </body>
 </html>
